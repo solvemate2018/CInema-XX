@@ -23,8 +23,15 @@ public class Ticket {
     @ManyToOne
     Projection projection;
 
-    public Ticket(int row, int column){
+    public Ticket(int row, int column, boolean sold, Projection projection){
         this.ticketRow = row;
+        this.ticketColumn = column;
+        this.sold=sold;
+        this.projection=projection;
+    }
+
+    public Ticket(int row, int column){
+        this.ticketRow= row;
         this.ticketColumn = column;
     }
 }
