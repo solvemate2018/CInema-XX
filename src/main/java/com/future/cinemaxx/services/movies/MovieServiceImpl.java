@@ -1,6 +1,5 @@
 package com.future.cinemaxx.services.movies;
 
-import com.future.cinemaxx.entities.Genre;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.repositories.CategoryRepo;
 import com.future.cinemaxx.repositories.GenreRepo;
@@ -9,7 +8,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import java.util.List;
 
-public class MovieServiceImpl implements MovieSeviceInterface{
+public class MovieServiceImpl implements movieServiceInterface {
     MovieRepo movieRepo;
     GenreRepo genreRepo;
     CategoryRepo categoryRepo;

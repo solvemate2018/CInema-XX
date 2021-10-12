@@ -3,7 +3,10 @@ package com.future.cinemaxx.dtos.converter;
 import com.future.cinemaxx.dtos.CategoryDTO;
 import com.future.cinemaxx.dtos.GenreDTO;
 import com.future.cinemaxx.dtos.MovieDTO;
+import com.future.cinemaxx.dtos.ProjectionDTO;
+import com.future.cinemaxx.entities.Category;
 import com.future.cinemaxx.entities.Movie;
+import com.future.cinemaxx.entities.Projection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,4 +28,18 @@ public class DTOConverter {
     public Movie convertToMovie(MovieDTO movieDTO){
         return modelMapper.map(movieDTO, Movie.class);
     }
+
+    public ProjectionDTO convertToProjectionDTO(Projection projection){
+        ProjectionDTO projectionDTO = modelMapper.map(projection,ProjectionDTO.class);
+        projectionDTO.setMovie(modelMapper.map(projection.getMovie(), MovieDTO.class));
+        //add Setting CinemaHallDTO or other solution.
+        return projectionDTO;
+    }
+    public Projection convertToProjection(ProjectionDTO projectionDTO){return modelMapper.map(projectionDTO,Projection.class);}
+
+    public CategoryDTO convertToCategoryDTO(Category category){
+        CategoryDTO categoryDTO = modelMapper.map(category,CategoryDTO.class);
+        return categoryDTO;
+    }
+    public Category covertToCategory(CategoryDTO categoryDTO){return modelMapper.map(categoryDTO, Category.class);}
 }
