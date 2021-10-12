@@ -19,7 +19,7 @@ public class TheaterServiceImpl implements TheaterServiceInterface{
     @Override
     public Theater getTheaterById(int id) {
         return theaterRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
-    }
+    } //.
 
     @Override
     public Theater createTheater(Theater theater) {
