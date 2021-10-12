@@ -39,8 +39,8 @@ public class Projection{
         this.hall = hall;
         this.movie = movie;
 
-        for(int i = 1; i <= hall.getRows(); i++){
-            for(int j = 1; j <= hall.getColumns(); j++){
+        for(int i = 1; i <= hall.getNumberOfRows(); i++){
+            for(int j = 1; j <= hall.getNumberOfColumns(); j++){
                 tickets.add(new Ticket(i, j));
             }
         }

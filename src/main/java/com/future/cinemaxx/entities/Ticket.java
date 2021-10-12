@@ -12,10 +12,10 @@ public class Ticket {
     private int id;
 
     @Column(nullable = false)
-    private int row;
+    private int ticketRow;
 
     @Column(nullable = false)
-    private int column;
+    private int ticketColumn;
 
     @Column
     private boolean sold = false;
@@ -24,7 +24,7 @@ public class Ticket {
     Projection projection;
 
     public Ticket(int row, int column){
-        this.row = row;
-        this.column = column;
+        this.ticketRow = row;
+        this.ticketColumn = column;
     }
 }

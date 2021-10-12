@@ -18,10 +18,10 @@ public class CinemaHall {
     private String name;
 
     @Column
-    private int rows;
+    private int numberOfRows;
 
     @Column
-    private int columns;
+    private int numberOfColumns;
 
     @ManyToOne
     Theater theater;
@@ -31,8 +31,8 @@ public class CinemaHall {
 
     public CinemaHall(String name, int rows, int columns, Theater theater){
         this.name = name;
-        this.rows = rows;
-        this.columns = columns;
+        this.numberOfRows = rows;
+        this.numberOfColumns = columns;
         this.theater = theater;
     }
 }
