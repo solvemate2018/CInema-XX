@@ -10,7 +10,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +31,11 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
+    public List<Projection> getAllProjectionsByTheaterId(int id) {
+        return projectionRepo.getProjectionByHall_Theater_Id(id);
+    }
+
+    @Override
     public Projection getProjectionById(int id) {
         return projectionRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
     }
@@ -50,9 +54,11 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
-    public List<Projection> getAllProjectionsByDate(LocalDate time) {
+    public List<Projection> getAllProjectionsByDateAndTheaterId(LocalDate time,int id) {
         List<Projection> projections = getAllProjections();
         return projections.stream().filter(p -> p.getStartTime()
-                .toLocalDate().equals(time)).collect(Collectors.toList());
+                .toLocalDate().equals(time)&& p.getHall().getTheater().getId()==id)
+                .collect(Collectors.toList());
     }
+
 }

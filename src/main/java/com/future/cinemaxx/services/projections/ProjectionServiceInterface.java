@@ -8,8 +8,9 @@ import java.util.List;
 
 public interface ProjectionServiceInterface {
     List<Projection> getAllProjections();
+    List<Projection> getAllProjectionsByTheaterId(int id);
     Projection getProjectionById(int id);
     Projection createProjection(int movieId, int hallId, LocalDateTime startTime, float ticketPrice);
     void deleteProjection(int projectionId);
-    List<Projection> getAllProjectionsByDate(LocalDate time);
+    List<Projection> getAllProjectionsByDateAndTheaterId(LocalDate time, int theaterId);
 }
