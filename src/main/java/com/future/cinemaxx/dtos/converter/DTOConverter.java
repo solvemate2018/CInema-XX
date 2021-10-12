@@ -1,9 +1,6 @@
 package com.future.cinemaxx.dtos.converter;
 
-import com.future.cinemaxx.dtos.CategoryDTO;
-import com.future.cinemaxx.dtos.GenreDTO;
-import com.future.cinemaxx.dtos.MovieDTO;
-import com.future.cinemaxx.dtos.ProjectionDTO;
+import com.future.cinemaxx.dtos.*;
 import com.future.cinemaxx.entities.Category;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.entities.Projection;
@@ -32,7 +29,7 @@ public class DTOConverter {
     public ProjectionDTO convertToProjectionDTO(Projection projection){
         ProjectionDTO projectionDTO = modelMapper.map(projection,ProjectionDTO.class);
         projectionDTO.setMovie(modelMapper.map(projection.getMovie(), MovieDTO.class));
-        //add Setting CinemaHallDTO or other solution.
+        projectionDTO.setHall(modelMapper.map(projection.getHall(), CinemaHallDTO.class));
         return projectionDTO;
     }
     public Projection convertToProjection(ProjectionDTO projectionDTO){return modelMapper.map(projectionDTO,Projection.class);}
