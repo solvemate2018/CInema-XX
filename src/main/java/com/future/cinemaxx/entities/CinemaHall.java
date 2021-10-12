@@ -3,32 +3,36 @@ package com.future.cinemaxx.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity @Getter @Setter
-@EqualsAndHashCode @Table(name = "cinemaHalls")
+@NoArgsConstructor
 public class CinemaHall {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     //Usually something like "A", "B" etc.
-    @Basic
     @Column(length = 10, nullable = false)
     private String name;
 
-    @Basic
-    @Column(length = 10)
+    @Column
     private int rows;
 
-    @Basic
-    @Column(length = 10)
+    @Column
     private int columns;
 
     @ManyToOne
-    private Theater theater;
+    Theater theater;
 
     @OneToMany(mappedBy = "hall")
-    private Collection<Event> events;
+    Collection<Projection> projections = new ArrayList<>();
+
+    public CinemaHall(String name, int rows, int columns, Theater theater){
+        this.name = name;
+        this.rows = rows;
+        this.columns = columns;
+        this.theater = theater;
+    }
 }

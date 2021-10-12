@@ -2,32 +2,37 @@ package com.future.cinemaxx.entities;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity @Getter @Setter
-@EqualsAndHashCode @Table(name = "theaters")
+@NoArgsConstructor
 public class Theater {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Basic
     @Column(unique = true, length = 40, nullable = false)
     private String name;
 
-    @Basic
     @Column(length = 40, nullable = false)
     private String city;
 
-    @Basic
     @Column(length = 40, nullable = false)
     private String street;
 
-    @Basic
     @Column(nullable = false)
     private int streetNumber;
 
     @OneToMany(mappedBy = "theater")
-    private Collection<CinemaHall> cinemaHalls;
+    List<CinemaHall> cinemaHalls = new ArrayList<>();
+
+    public Theater(String name, String city, String street, int streetNumber){
+        this.name = name;
+        this.city = city;
+        this.street = street;
+        this.streetNumber = streetNumber;
+    }
 }
