@@ -10,6 +10,7 @@ import com.future.cinemaxx.entities.Projection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DTOConverter {
@@ -76,6 +77,12 @@ public class DTOConverter {
     }
 
     public Projection convertToProjection(ProjectionDTO projectionDTO){return modelMapper.map(projectionDTO,Projection.class);}
+
+    public List<ProjectionDTO> convertToListProjectionDTO(List<Projection> projections){
+        return projections.stream()
+                .map(this::convertToProjectionDTO)
+                .collect(Collectors.toList());
+    }
 
     public CategoryDTO convertToCategoryDTO(Category category){
         CategoryDTO categoryDTO = modelMapper.map(category,CategoryDTO.class);

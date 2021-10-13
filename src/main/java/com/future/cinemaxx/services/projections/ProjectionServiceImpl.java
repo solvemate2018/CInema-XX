@@ -7,12 +7,14 @@ import com.future.cinemaxx.repositories.CinemaHallRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ProjectionServiceImpl implements ProjectionServiceInterface {
 
     ProjectionRepo projectionRepo;
@@ -26,17 +28,22 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
-    public List<Projection> getAllProjections() {
+    public List<Projection> getAll() {
         return projectionRepo.findAll();
     }
 
     @Override
-    public List<Projection> getAllProjectionsByTheaterId(int id) {
-        return projectionRepo.getProjectionByHall_Theater_Id(id);
+    public List<Projection> getByTheaterId(int id) {
+        return projectionRepo.getProjectionsByHall_Theater_Id(id);
     }
 
     @Override
-    public Projection getProjectionById(int id) {
+    public List<Projection> getByTheaterIdAndHall(int theaterId, int hallId) {
+        return projectionRepo.getProjectionsByHall_Theater_IdAndHall_Id(theaterId,hallId);
+    }
+
+    @Override
+    public Projection getById(int id) {
         return projectionRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
     }
 
@@ -54,23 +61,18 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
-    //Might not be needed
-    public List<Projection> getAllProjectionsByDateAndTheaterId(LocalDate time,int id) {
-        List<Projection> projections = getAllProjections();
-        return projections.stream().filter(p -> p.getStartTime()
-                .toLocalDate().equals(time)&& p.getHall().getTheater().getId()==id)
-                .collect(Collectors.toList());
+    public List<Projection> getByDateAndTheaterId(int theaterId, LocalDate time) {
+        List<Projection> projections = projectionRepo.getProjectionsByStartTime(time);
+        return projections.stream().filter
+                (projection -> projection
+                        .getHall().getTheater()
+                        .getId()==theaterId).collect(Collectors.toList());
     }
 
     @Override
-    public List<Projection> getAllProjectionsByDateAndTheaterId2(LocalDate time, int theaterId) {
-        return projectionRepo.getProjectionByHall_Theater_IdAndStartTime(theaterId,time);
-    }
-
-    @Override
-    public List<Projection> getAllProjectionsBetweenDates(LocalDate date1, LocalDate date2) {
-        //Temporary solution
-        return projectionRepo.getProjectionsByStartTimeBetween(date1.atStartOfDay(),date2.atStartOfDay());
+    public List<Projection> getProjectionsBetweenDates(int theaterId, LocalDate date1, LocalDate date2) {
+        return projectionRepo.getProjectionsByHall_Theater_IdAndStartTimeBetween(theaterId,date1.atStartOfDay()
+                ,date2.plusDays(1).atStartOfDay());
     }
 
 }
