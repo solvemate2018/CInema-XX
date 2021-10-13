@@ -18,4 +18,6 @@ public interface ProjectionRepo extends JpaRepository<Projection, Integer> {
     List<Projection> getProjectionsByHall_Theater_IdAndStartTimeBetween(int id, LocalDateTime date1,LocalDateTime date2);
 
     List<Projection> getProjectionsByHall_Theater_IdAndHall_Name(int theaterId, String hallName);
+
+    List<Projection> getProjectionByHall_Id(int hallId);
 }

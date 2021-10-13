@@ -40,18 +40,23 @@ public class ProjectionControllerImpl implements ProjectionControllerInterface {
     }
 
     @Override
+    public List<ProjectionDTO> getByHallId(int hallId) {
+        return dtoConverter.convertToListProjectionDTO(projectionService.getByHallId(hallId));
+    }
+
+    @Override
     public List<ProjectionDTO> getByTheaterIdAndHallName(int theaterId, String hallName) {
         return dtoConverter.convertToListProjectionDTO(projectionService.getByTheaterIdAndHallName(theaterId,hallName));
     }
 
     @Override
-    public List<ProjectionDTO> getByDateAndTheaterId(int theaterId, String date) {
-        return dtoConverter.convertToListProjectionDTO(projectionService.getByDateAndTheaterId(theaterId,LocalDate.parse(date)));
+    public List<ProjectionDTO> getByDateAndTheaterId(int theaterId, LocalDate date) {
+        return dtoConverter.convertToListProjectionDTO(projectionService.getByDateAndTheaterId(theaterId,date));
     }
 
     @Override
-    public List<ProjectionDTO> getProjectionsBetweenDates(int theaterId, String dateFrom, String dateTo) {
+    public List<ProjectionDTO> getProjectionsBetweenDates(int theaterId, LocalDate dateFrom, LocalDate dateTo) {
         return dtoConverter.convertToListProjectionDTO(projectionService
-                .getProjectionsBetweenDates(theaterId, LocalDate.parse(dateFrom) ,LocalDate.parse(dateTo)));
+                .getProjectionsBetweenDates(theaterId, dateFrom ,dateTo));
     }
 }
