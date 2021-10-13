@@ -61,4 +61,9 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Projection> getAllProjectionsByDateAndTheaterId2(LocalDate time, int theaterId) {
+        return null;
+    }
+
 }

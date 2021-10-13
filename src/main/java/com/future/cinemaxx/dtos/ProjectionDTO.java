@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 public class ProjectionDTO {
     private LocalDateTime startTime;
     private float ticketPrice;
-    private CinemaHallDTO hall;
+    private String cinemaHallName;
     private MovieDTO movie;
 }
