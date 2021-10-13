@@ -1,6 +1,7 @@
 package com.future.cinemaxx.rest.movie;
 
 import com.future.cinemaxx.dtos.MovieDTO;
+import com.future.cinemaxx.dtos.converter.DTOConverter;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
 import com.future.cinemaxx.services.movies.movieServiceInterface;
@@ -17,14 +18,8 @@ public class MovieControllerImpl implements MovieControllerInterface{
     MovieServiceImpl movieService;
     @Autowired
     ModelMapper modelMapper;
-
-    private MovieDTO convertToDTO(Movie movie){
-    return modelMapper.map(movie, MovieDTO.class);
-    }
-
-    private Movie convertToEntity(MovieDTO movieDTO){
-        return  modelMapper.map(movieDTO, Movie.class);
-    }
+    @Autowired
+    DTOConverter dtoConverter;
 
     @Override
     public void deleteMovieById(int id) {
@@ -33,6 +28,6 @@ public class MovieControllerImpl implements MovieControllerInterface{
 
     @Override
     public void update(int id, MovieDTO movieDTO) {
-    movieService.updateMovie(id,convertToEntity(movieDTO));
+    movieService.updateMovie(id,dtoConverter.convertToMovie(movieDTO));
     }
 }

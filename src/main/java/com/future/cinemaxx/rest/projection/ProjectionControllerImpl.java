@@ -1,6 +1,7 @@
 package com.future.cinemaxx.rest.projection;
 
 import com.future.cinemaxx.dtos.ProjectionDTO;
+import com.future.cinemaxx.dtos.converter.DTOConverter;
 import com.future.cinemaxx.entities.Projection;
 import com.future.cinemaxx.services.projections.ProjectionServiceInterface;
 import org.modelmapper.ModelMapper;
@@ -16,14 +17,9 @@ public class ProjectionControllerImpl implements ProjectionControllerInterface{
     ProjectionServiceInterface projectionService;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    DTOConverter dtoConverter;
 
-    private ProjectionDTO convertToDTO(Projection projection){
-        return modelMapper.map(projection,ProjectionDTO.class);
-    }
-
-    private Projection convertToEntity(ProjectionDTO projectionDTO){
-        return modelMapper.map(projectionDTO, Projection.class);
-    }
 
     @Override
     public void deleteProjectionById(int id) {
@@ -32,6 +28,6 @@ public class ProjectionControllerImpl implements ProjectionControllerInterface{
 
     @Override
     public void updateProjection(int id, ProjectionDTO projectionDTO) {
-    projectionService.updateProjectionById(id, convertToEntity(projectionDTO));
+    projectionService.updateProjectionById(id, dtoConverter.convertToProjection(projectionDTO));
     }
 }
