@@ -14,4 +14,5 @@ public interface ProjectionServiceInterface {
     void deleteProjection(int projectionId);
     List<Projection> getAllProjectionsByDateAndTheaterId(LocalDate time, int theaterId);
     List<Projection> getAllProjectionsByDateAndTheaterId2(LocalDate time, int theaterId);
+    List<Projection> getAllProjectionsBetweenDates(LocalDate date1, LocalDate date2);
 }
