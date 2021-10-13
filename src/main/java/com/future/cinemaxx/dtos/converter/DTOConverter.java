@@ -2,10 +2,10 @@ package com.future.cinemaxx.dtos.converter;
 
 import com.future.cinemaxx.dtos.*;
 import com.future.cinemaxx.entities.CinemaHall;
-import com.future.cinemaxx.dtos.*;
 import com.future.cinemaxx.entities.Category;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.entities.Theater;
+import com.future.cinemaxx.entities.Ticket;
 import com.future.cinemaxx.entities.Projection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,26 @@ public class DTOConverter {
 
     public Movie convertToMovie(MovieDTO movieDTO){
         return modelMapper.map(movieDTO, Movie.class);
+    }
+
+    public TheaterDTO convertToTheaterDTO(Theater theater){
+        TheaterDTO theaterDTO = modelMapper.map(theater, TheaterDTO.class);
+        //modelMapper.map(theater.getCinemaHalls(), theaterDTO.getCinemaHallDTOs());
+        return theaterDTO;
+    }
+
+    public Theater convertToTheater(TheaterDTO theaterDTO){
+        return modelMapper.map(theaterDTO, Theater.class);
+    }
+
+    public TicketDTO convertToTicketDTO(Ticket ticket){
+        TicketDTO ticketDTO = modelMapper.map(ticket, TicketDTO.class);
+        ticketDTO.setProjection(modelMapper.map(ticket.getProjection(),ProjectionDTO.class));
+        return ticketDTO;
+    }
+
+    public Ticket convertToTicket(TicketDTO ticketDTO){
+        return modelMapper.map(ticketDTO, Ticket.class);
     }
 
     public CinemaHallDTO convertToCinemaHallDTO(CinemaHall cinemaHall) {
