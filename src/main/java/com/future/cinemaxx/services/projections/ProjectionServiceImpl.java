@@ -6,24 +6,32 @@ import com.future.cinemaxx.entities.Projection;
 import com.future.cinemaxx.repositories.CinemaHallRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
+import com.future.cinemaxx.services.movies.MovieServiceImpl;
+import com.future.cinemaxx.services.movies.movieServiceInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
 public class ProjectionServiceImpl implements ProjectionServiceInterface {
 
+
+    MovieServiceImpl movieService;
     ProjectionRepo projectionRepo;
     MovieRepo movieRepo;
     CinemaHallRepo hallRepo;
 
-    public ProjectionServiceImpl(ProjectionRepo projectionRepo, MovieRepo movieRepo,CinemaHallRepo hallRepo){
+    public ProjectionServiceImpl(ProjectionRepo projectionRepo, MovieRepo movieRepo,CinemaHallRepo hallRepo, MovieServiceImpl movieService){
         this.movieRepo=movieRepo;
         this.projectionRepo=projectionRepo;
         this.hallRepo=hallRepo;
+        this.movieService=movieService;
     }
+
 
     @Override
     public List<Projection> getAllProjections() {
@@ -60,5 +68,27 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
                 .toLocalDate().equals(time)&& p.getHall().getTheater().getId()==id)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Projection updateProjectionById(int id, Projection projection) {
+        Projection updatedProjection = projectionRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException());
+        if(projection.getStartTime()!=null){ updatedProjection.setStartTime(projection.getStartTime()); }
+        if(projection.getTicketPrice()!=0){updatedProjection.setTicketPrice(projection.getTicketPrice()); }
+        if(projection.getHall()!=null){
+            CinemaHall cinemaHall = hallRepo.findCinemaHallByName(projection.getHall().getName());
+            if(cinemaHall==null){
+                throw new ResourceNotFoundException();
+            }else{
+                updatedProjection.setHall(cinemaHall);
+            }
+        }
+        if(projection.getMovie()!=null){
+            movieService.updateMovie(projection.getMovie().getId(), projection.getMovie());
+        }
+
+        return updatedProjection;
+    }
+
 
 }

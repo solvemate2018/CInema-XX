@@ -4,9 +4,10 @@ import com.future.cinemaxx.entities.CinemaHall;
 import com.future.cinemaxx.repositories.CinemaHallRepo;
 import com.future.cinemaxx.repositories.TheaterRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class CinemaHallServiceImpl implements CinemaHallServiceInterface {
 
     CinemaHallRepo cinemaHallRepo;
