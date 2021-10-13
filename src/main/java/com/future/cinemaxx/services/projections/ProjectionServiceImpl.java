@@ -56,11 +56,23 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
+    //Might not be needed
     public List<Projection> getAllProjectionsByDateAndTheaterId(LocalDate time,int id) {
         List<Projection> projections = getAllProjections();
         return projections.stream().filter(p -> p.getStartTime()
                 .toLocalDate().equals(time)&& p.getHall().getTheater().getId()==id)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Projection> getAllProjectionsByDateAndTheaterId2(LocalDate time, int theaterId) {
+        return projectionRepo.getProjectionByHall_Theater_IdAndStartTime(theaterId,time);
+    }
+
+    @Override
+    public List<Projection> getAllProjectionsBetweenDates(LocalDate date1, LocalDate date2) {
+        //Temporary solution
+        return projectionRepo.getProjectionsByStartTimeBetween(date1.atStartOfDay(),date2.atStartOfDay());
     }
 
 }
