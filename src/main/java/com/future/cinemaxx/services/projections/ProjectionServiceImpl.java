@@ -38,8 +38,8 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
-    public List<Projection> getByTheaterIdAndHall(int theaterId, int hallId) {
-        return projectionRepo.getProjectionsByHall_Theater_IdAndHall_Id(theaterId,hallId);
+    public List<Projection> getByTheaterIdAndHallName(int theaterId, String hallName) {
+        return projectionRepo.getProjectionsByHall_Theater_IdAndHall_Name(theaterId,hallName);
     }
 
     @Override
@@ -70,9 +70,9 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
-    public List<Projection> getProjectionsBetweenDates(int theaterId, LocalDate date1, LocalDate date2) {
-        return projectionRepo.getProjectionsByHall_Theater_IdAndStartTimeBetween(theaterId,date1.atStartOfDay()
-                ,date2.plusDays(1).atStartOfDay());
+    public List<Projection> getProjectionsBetweenDates(int theaterId, LocalDate dateFrom, LocalDate dateTo) {
+        return projectionRepo.getProjectionsByHall_Theater_IdAndStartTimeBetween(theaterId,dateFrom.atStartOfDay()
+                ,dateTo.plusDays(1).atStartOfDay());
     }
 
 }

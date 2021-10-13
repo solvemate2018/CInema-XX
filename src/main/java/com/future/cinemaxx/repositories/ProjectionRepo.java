@@ -12,10 +12,10 @@ public interface ProjectionRepo extends JpaRepository<Projection, Integer> {
 
     List<Projection> getProjectionsByHall_Theater_Id(int id);
 
-    @Query(value = "SELECT e.* FROM Entity e WHERE DATE(start_time) =:date", nativeQuery = true)
+    @Query(value = "SELECT e.* FROM Projection e WHERE DATE(start_time) =:date", nativeQuery = true)
     List<Projection> getProjectionsByStartTime(LocalDate date);
 
     List<Projection> getProjectionsByHall_Theater_IdAndStartTimeBetween(int id, LocalDateTime date1,LocalDateTime date2);
 
-    List<Projection> getProjectionsByHall_Theater_IdAndHall_Id(int theaterId, int hallId);
+    List<Projection> getProjectionsByHall_Theater_IdAndHall_Name(int theaterId, String hallName);
 }

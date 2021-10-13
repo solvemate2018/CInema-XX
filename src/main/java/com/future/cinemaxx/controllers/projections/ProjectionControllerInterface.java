@@ -18,13 +18,13 @@ public interface ProjectionControllerInterface {
     @GetMapping("/theater/{theaterId}")
     List<ProjectionDTO> getByTheaterId(@PathVariable int theaterId);
 
-    @GetMapping("/theater/{theaterId}/hall/{hallId}")
-    List<ProjectionDTO> getByTheaterIdAndHall(@PathVariable int theaterId, @PathVariable int hallId);
+    @GetMapping("/theater/{theaterId}/hall/{hallName}")
+    List<ProjectionDTO> getByTheaterIdAndHallName(@PathVariable int theaterId, @PathVariable String hallName);
 
-    @GetMapping("/theater/{theaterId}/{time}")
-    List<ProjectionDTO> getByDateAndTheaterId(@PathVariable int theaterId,@PathVariable LocalDate time);
+    @GetMapping("/theater/{theaterId}/{date}")
+    List<ProjectionDTO> getByDateAndTheaterId(@PathVariable int theaterId,@PathVariable String date);
 
-    @GetMapping("/theater/{theaterId}/{date1}/{date2}")
-    List<ProjectionDTO> getProjectionsBetweenDates(@PathVariable int theaterId, @PathVariable LocalDate date1, @PathVariable LocalDate date2);
+    @GetMapping("/theater/{theaterId}/{dateFrom}/{dateTo}")
+    List<ProjectionDTO> getProjectionsBetweenDates(@PathVariable int theaterId, @PathVariable String dateFrom, @PathVariable String dateTo);
 
 }
