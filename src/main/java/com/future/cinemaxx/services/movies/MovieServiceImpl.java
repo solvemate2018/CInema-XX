@@ -5,10 +5,12 @@ import com.future.cinemaxx.repositories.CategoryRepo;
 import com.future.cinemaxx.repositories.GenreRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class MovieServiceImpl implements movieServiceInterface {
+@Service
+public class MovieServiceImpl implements MovieServiceInterface {
     MovieRepo movieRepo;
     GenreRepo genreRepo;
     CategoryRepo categoryRepo;
@@ -26,15 +28,15 @@ public class MovieServiceImpl implements movieServiceInterface {
 
     @Override
     public Movie getMovieById(int id) {
-        return movieRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        return movieRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public Movie createMovie(Movie movie, int genreId, int categoryId) {
         return movieRepo.save(new Movie(movie.getName(),
                 movie.getDuration(),
-                genreRepo.findById(genreId).orElseThrow(() -> new ResourceNotFoundException()),
-                categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException())));
+                genreRepo.findById(genreId).orElseThrow(ResourceNotFoundException::new),
+                categoryRepo.findById(categoryId).orElseThrow(ResourceNotFoundException::new)));
     }
 
     @Override

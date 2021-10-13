@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Config {
-    //Set matching strategy STRICT
-    //otherwise it can generate the id when converting from DTO to entity.
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -19,7 +17,6 @@ public class Config {
 
     @Bean
     public DTOConverter dtosConverter(ModelMapper modelMapper){
-        DTOConverter dtOsConverter = new DTOConverter(modelMapper);
-        return dtOsConverter;
+        return new DTOConverter(modelMapper);
     }
 }

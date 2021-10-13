@@ -7,12 +7,14 @@ import com.future.cinemaxx.repositories.CinemaHallRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ProjectionServiceImpl implements ProjectionServiceInterface {
 
     ProjectionRepo projectionRepo;
@@ -37,13 +39,13 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
 
     @Override
     public Projection getProjectionById(int id) {
-        return projectionRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        return projectionRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
     public Projection createProjection(int movieId, int hallId, LocalDateTime startTime, float ticketPrice) {
-        Movie movie = movieRepo.findById(movieId).orElseThrow(()-> new ResourceNotFoundException());
-        CinemaHall hall = hallRepo.findById(hallId).orElseThrow(()->new ResourceNotFoundException());
+        Movie movie = movieRepo.findById(movieId).orElseThrow(ResourceNotFoundException::new);
+        CinemaHall hall = hallRepo.findById(hallId).orElseThrow(ResourceNotFoundException::new);
         return projectionRepo.save(new Projection(startTime,ticketPrice,hall,movie));
     }
 

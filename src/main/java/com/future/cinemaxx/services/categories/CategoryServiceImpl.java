@@ -3,9 +3,11 @@ package com.future.cinemaxx.services.categories;
 import com.future.cinemaxx.entities.Category;
 import com.future.cinemaxx.repositories.CategoryRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CategoryServiceImpl implements CategoryServiceInterface {
     private CategoryRepo categoryRepo;
 

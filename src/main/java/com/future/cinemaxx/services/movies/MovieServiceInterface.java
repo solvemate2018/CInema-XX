@@ -4,7 +4,7 @@ import com.future.cinemaxx.entities.Movie;
 
 import java.util.List;
 
-public interface movieServiceInterface {
+public interface MovieServiceInterface {
     List<Movie> getAllMovies();
     Movie getMovieById(int id);
     Movie createMovie(Movie movie, int genreId, int categoryId);

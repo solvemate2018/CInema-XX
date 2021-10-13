@@ -4,9 +4,11 @@ import com.future.cinemaxx.entities.Theater;
 import com.future.cinemaxx.repositories.TheaterRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TheaterServiceImpl implements TheaterServiceInterface{
     @Autowired
     TheaterRepo theaterRepo;
@@ -18,8 +20,8 @@ public class TheaterServiceImpl implements TheaterServiceInterface{
 
     @Override
     public Theater getTheaterById(int id) {
-        return theaterRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
-    } //.
+        return theaterRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
+    }
 
     @Override
     public Theater createTheater(Theater theater) {

@@ -1,12 +1,13 @@
-package com.future.cinemaxx.services.cinemaHall;
+package com.future.cinemaxx.services.cinemaHalls;
 
 import com.future.cinemaxx.entities.CinemaHall;
 import com.future.cinemaxx.repositories.CinemaHallRepo;
-import com.future.cinemaxx.repositories.TheaterRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CinemaHallServiceImpl implements CinemaHallServiceInterface {
 
     CinemaHallRepo cinemaHallRepo;
@@ -23,7 +24,7 @@ public class CinemaHallServiceImpl implements CinemaHallServiceInterface {
 
     @Override
     public CinemaHall getCinemaHallById(int id) {
-        return cinemaHallRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        return cinemaHallRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override

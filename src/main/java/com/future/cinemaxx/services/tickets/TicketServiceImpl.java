@@ -6,9 +6,11 @@ import com.future.cinemaxx.repositories.ProjectionRepo;
 import com.future.cinemaxx.repositories.TicketRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TicketServiceImpl implements TicketServiceInterface{
     @Autowired
     TicketRepo ticketRepo;
@@ -22,7 +24,7 @@ public class TicketServiceImpl implements TicketServiceInterface{
 
     @Override
     public Ticket getTicketById(int id) {
-        return ticketRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        return ticketRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class TicketServiceImpl implements TicketServiceInterface{
         return ticketRepo.save(new Ticket(ticket.getTicketRow(),
                 ticket.getTicketColumn(),
                 ticket.isSold(),
-                projectionRepo.findById(projectionId).orElseThrow(() -> new ResourceNotFoundException())));
+                projectionRepo.findById(projectionId).orElseThrow(ResourceNotFoundException::new)));
     }
 
     @Override
