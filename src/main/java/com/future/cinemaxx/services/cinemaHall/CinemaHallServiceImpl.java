@@ -18,7 +18,8 @@ public class CinemaHallServiceImpl implements CinemaHallServiceInterface {
 
     @Override
     public List<CinemaHall> getAllCinemaHalls() {
-        return cinemaHallRepo.findAll();    }
+        return cinemaHallRepo.findAll();
+    }
 
     @Override
     public CinemaHall getCinemaHallById(int id) {

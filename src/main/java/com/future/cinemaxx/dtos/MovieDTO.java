@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MovieDTO {
     private String name;
-    private LocalDateTime start_time;
     private Duration duration;
     private CategoryDTO category;
     private GenreDTO genre;

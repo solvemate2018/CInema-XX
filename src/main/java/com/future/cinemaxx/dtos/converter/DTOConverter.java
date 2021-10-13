@@ -10,6 +10,8 @@ import com.future.cinemaxx.entities.Projection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.stream.Collectors;
+
 public class DTOConverter {
     ModelMapper modelMapper;
 
@@ -31,7 +33,11 @@ public class DTOConverter {
 
     public TheaterDTO convertToTheaterDTO(Theater theater){
         TheaterDTO theaterDTO = modelMapper.map(theater, TheaterDTO.class);
-        //modelMapper.map(theater.getCinemaHalls(), theaterDTO.getCinemaHallDTOs());
+        theaterDTO.setCinemaHallDTOList(
+                theater.getCinemaHalls().stream()
+                        .map(cinemaHall -> convertToCinemaHallDTO(cinemaHall))
+                        .collect(Collectors.toList()));
+
         return theaterDTO;
     }
 
@@ -51,38 +57,30 @@ public class DTOConverter {
 
     public CinemaHallDTO convertToCinemaHallDTO(CinemaHall cinemaHall) {
         CinemaHallDTO cinemaHallDTO = modelMapper.map(cinemaHall, CinemaHallDTO.class);
+        cinemaHallDTO.setProjectionDTOS(
+                cinemaHall.getProjections().stream()
+                .map(projection -> convertToProjectionDTO(projection)).collect(Collectors.toList())
+        );
         return cinemaHallDTO;
-
     }
 
     public CinemaHall convertToCinemaHall(CinemaHallDTO cinemaHallDTO) {
         return modelMapper.map(cinemaHallDTO, CinemaHall.class);
     }
 
-    public TheaterDTO convertToTheaterDTO(Theater theater)
-    {
-        TheaterDTO theaterDTO = modelMapper.map(theater, TheaterDTO.class);
-        return theaterDTO;
-    }
-
-    public Theater convertToTheater (TheaterDTO theaterDTO)
-    {
-        return modelMapper.map(theaterDTO, Theater.class);
-    }
-
-
-
     public ProjectionDTO convertToProjectionDTO(Projection projection){
         ProjectionDTO projectionDTO = modelMapper.map(projection,ProjectionDTO.class);
         projectionDTO.setMovie(modelMapper.map(projection.getMovie(), MovieDTO.class));
-        projectionDTO.setHall(modelMapper.map(projection.getHall(), CinemaHallDTO.class));
+        projectionDTO.setCinemaHallName(projection.getHall().getName());
         return projectionDTO;
     }
+
     public Projection convertToProjection(ProjectionDTO projectionDTO){return modelMapper.map(projectionDTO,Projection.class);}
 
     public CategoryDTO convertToCategoryDTO(Category category){
         CategoryDTO categoryDTO = modelMapper.map(category,CategoryDTO.class);
         return categoryDTO;
     }
+
     public Category covertToCategory(CategoryDTO categoryDTO){return modelMapper.map(categoryDTO, Category.class);}
 }
