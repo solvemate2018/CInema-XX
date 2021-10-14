@@ -11,6 +11,9 @@ import java.util.List;
 public class CinemaHallServiceImpl implements CinemaHallServiceInterface {
 
     CinemaHallRepo cinemaHallRepo;
+    TheaterRepo theaterRepo;
+
+
 
     public CinemaHallServiceImpl(CinemaHallRepo cinemaHallRepo)
     {
@@ -28,12 +31,18 @@ public class CinemaHallServiceImpl implements CinemaHallServiceInterface {
     }
 
     @Override
-    public CinemaHall createCinemaHall(CinemaHall cinemaHall, String name, int numberOfRows, int numberOfColumns) {
-        return null;
+    public CinemaHall createCinemaHall(CinemaHall cinemaHall, String name, int numberOfRows, int numberOfColumns, int theaterId) {
+        return cinemaHallRepo.save(new CinemaHall(cinemaHall.getName(), cinemaHall.getNumberOfRows(),
+                cinemaHall.getNumberOfColumns(),
+                theaterRepo.findById(theaterId).orElseThrow(()->new ResourceNotFoundException())));
+
+
     }
 
     @Override
-    public void deleteCinemaHall(int CinemaHallId) {
+    public void deleteCinemaHall(int cinemaHallId) {
+        if(!cinemaHallRepo.existsById(cinemaHallId)) throw new ResourceNotFoundException();
+        cinemaHallRepo.deleteById(cinemaHallId);
 
     }
 }
