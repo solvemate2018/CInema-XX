@@ -48,7 +48,7 @@ public class MovieServiceImpl implements MovieServiceInterface {
     }
 
     @Override
-    public void updateMovie(int id, Movie movie) {
+    public Movie updateMovie(int id, Movie movie) {
         Movie updatedMovie = movieRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException());
 
@@ -71,7 +71,7 @@ public class MovieServiceImpl implements MovieServiceInterface {
                 updatedMovie.setCategory(category);
             }
         }
-        movieRepo.save(updatedMovie);
+        return movieRepo.save(updatedMovie);
     }
 
 }

@@ -2,6 +2,7 @@ package com.future.cinemaxx.services.cinemaHalls;
 
 import com.future.cinemaxx.entities.CinemaHall;
 import com.future.cinemaxx.repositories.CinemaHallRepo;
+import com.future.cinemaxx.repositories.TheaterRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 

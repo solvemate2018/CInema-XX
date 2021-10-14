@@ -16,7 +16,6 @@ public interface ProjectionServiceInterface {
     Projection createProjection(int movieId, int hallId, LocalDateTime startTime, float ticketPrice);
     void deleteProjection(int projectionId);
     Projection updateProjectionById(int id, Projection projection);
-    List<Projection> getAllProjectionsBetweenDates(LocalDate date1, LocalDate date2);
     List<Projection> getByDateAndTheaterId(int theaterId, LocalDate date);
     List<Projection> getProjectionsBetweenDates(int theaterId, LocalDate timeFrom, LocalDate timeTo);
 

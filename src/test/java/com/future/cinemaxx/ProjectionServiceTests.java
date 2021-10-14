@@ -43,35 +43,35 @@ public class ProjectionServiceTests {
     @Test
     @Sql("/createMovies.sql")
     void getExpectedNumberOfProjections(){
-        long count = projectionService.getAllProjections().size();
+        long count = projectionService.getAll().size();
         assertEquals(3,count);
     }
 
     @Test
     @Sql("/createMovies.sql")
     void updateProjection(){
-        Projection projectionNew = projectionService.getProjectionById(100);
+        Projection projectionNew = projectionService.getById(100);
         projectionNew.setTicketPrice(99);
         projectionService.updateProjectionById(100,projectionNew);
-        assertEquals(99,projectionService.getProjectionById(100).getTicketPrice());
+        assertEquals(99,projectionService.getById(100).getTicketPrice());
     }
 
     @Test
     @Sql("/createMovies.sql")
     void updateProjectionMovieField(){
-        Projection projectionNew = projectionService.getProjectionById(100);
+        Projection projectionNew = projectionService.getById(100);
         projectionNew.setMovie(movieRepo.findById(101).get());
         projectionService.updateProjectionById(100,projectionNew);
-        assertEquals(movieRepo.findById(101).get(),projectionService.getProjectionById(100).getMovie());
+        assertEquals(movieRepo.findById(101).get(),projectionService.getById(100).getMovie());
     }
 
     @Test
     @Sql("/createMovies.sql")
     void updateProjectionNullField(){
-        Projection projectionNew = projectionService.getProjectionById(100);
+        Projection projectionNew = projectionService.getById(100);
         projectionNew.setMovie(null);
         projectionService.updateProjectionById(100,projectionNew);
-        assertEquals(null,projectionService.getProjectionById(100).getMovie());
+        assertEquals(null,projectionService.getById(100).getMovie());
     }
 
 }

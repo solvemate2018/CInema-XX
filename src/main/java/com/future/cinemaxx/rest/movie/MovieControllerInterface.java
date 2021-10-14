@@ -4,7 +4,18 @@ import com.future.cinemaxx.dtos.MovieDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 public interface MovieControllerInterface {
+    @GetMapping
+    List<MovieDTO> getAll();
+
+    @GetMapping("/{id}")
+    MovieDTO getById(@PathVariable int id);
+
+    @PostMapping("/genre/{genreId}/category/{categoryId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    MovieDTO create(@RequestBody MovieDTO movie, @PathVariable int genreId, @PathVariable int categoryId);
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -12,6 +23,5 @@ public interface MovieControllerInterface {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void update( @PathVariable("id") int id, @RequestBody MovieDTO movieDTO);
-
+    MovieDTO update( @PathVariable("id") int id, @RequestBody MovieDTO movieDTO);
 }

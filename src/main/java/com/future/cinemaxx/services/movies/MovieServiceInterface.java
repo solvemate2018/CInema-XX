@@ -10,5 +10,5 @@ public interface MovieServiceInterface {
     Movie getMovieById(int id);
     Movie createMovie(Movie movie, int genreId, int categoryId);
     void deleteMovie(int movieId);
-    void updateMovie(int id, Movie movie);
+    Movie updateMovie(int id, Movie movie);
 }
