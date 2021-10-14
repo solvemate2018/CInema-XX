@@ -1,5 +1,7 @@
 package com.future.cinemaxx.services.movies;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.future.cinemaxx.dtos.MovieDetails;
 import com.future.cinemaxx.entities.Movie;
 import org.springframework.stereotype.Service;
 
@@ -11,4 +13,5 @@ public interface MovieServiceInterface {
     Movie createMovie(Movie movie, int genreId, int categoryId);
     void deleteMovie(int movieId);
     Movie updateMovie(int id, Movie movie);
+    MovieDetails getMovieDetails(int movieId) throws JsonProcessingException;
 }

@@ -1,5 +1,6 @@
 package com.future.cinemaxx;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.future.cinemaxx.dtos.MovieDTO;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.repositories.CategoryRepo;
@@ -35,7 +36,7 @@ public class MovieServiceTests {
 
     @BeforeEach
     public void initService(){
-        movieService = new MovieServiceImpl(movieRepo,genreRepo,categoryRepo, projectionRepo);
+        movieService = new MovieServiceImpl(movieRepo,genreRepo,categoryRepo, projectionRepo, new ObjectMapper());
         modelMapper = new ModelMapper();
     }
 

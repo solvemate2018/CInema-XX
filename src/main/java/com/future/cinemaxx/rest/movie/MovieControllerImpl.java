@@ -1,6 +1,8 @@
 package com.future.cinemaxx.rest.movie;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.future.cinemaxx.dtos.MovieDTO;
+import com.future.cinemaxx.dtos.MovieDetails;
 import com.future.cinemaxx.dtos.converter.DTOConverter;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +48,10 @@ public class MovieControllerImpl implements MovieControllerInterface{
     @Override
     public MovieDTO update(int id, MovieDTO movieDTO) {
         return dtoConverter.convertToMovieDTO(movieService.updateMovie(id,dtoConverter.convertToMovie(movieDTO)));
+    }
+
+    @Override
+    public MovieDetails getDetails(int movieId) throws JsonProcessingException {
+        return movieService.getMovieDetails(movieId);
     }
 }
