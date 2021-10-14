@@ -1,12 +1,7 @@
 package com.future.cinemaxx.dtos.converter;
 
 import com.future.cinemaxx.dtos.*;
-import com.future.cinemaxx.entities.CinemaHall;
-import com.future.cinemaxx.entities.Category;
-import com.future.cinemaxx.entities.Movie;
-import com.future.cinemaxx.entities.Theater;
-import com.future.cinemaxx.entities.Ticket;
-import com.future.cinemaxx.entities.Projection;
+import com.future.cinemaxx.entities.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -89,4 +84,10 @@ public class DTOConverter {
     }
 
     public Category covertToCategory(CategoryDTO categoryDTO){return modelMapper.map(categoryDTO, Category.class);}
+
+    public GenreDTO convertToGenreDTO(Genre genre){
+        return modelMapper.map(genre, GenreDTO.class);
+    }
+
+    public Genre convertToGenre(GenreDTO genreDTO){return modelMapper.map(genreDTO, Genre.class);}
 }
