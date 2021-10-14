@@ -9,7 +9,7 @@ public interface CinemaHallServiceInterface {
 
     List<CinemaHall> getAllCinemaHalls();
     CinemaHall getCinemaHallById(int id);
-    CinemaHall createCinemaHall(CinemaHall cinemaHall, String name, int numberOfRows, int numberOfColumns);
+    CinemaHall createCinemaHall(CinemaHall cinemaHall, String name, int numberOfRows, int numberOfColumns, int theaterId);
     void deleteCinemaHall (int CinemaHallId);
 
 
