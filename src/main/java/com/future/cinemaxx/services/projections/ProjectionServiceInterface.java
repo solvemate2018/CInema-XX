@@ -1,6 +1,7 @@
 package com.future.cinemaxx.services.projections;
 
 import com.future.cinemaxx.entities.Projection;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,7 +13,6 @@ public interface ProjectionServiceInterface {
     Projection getProjectionById(int id);
     Projection createProjection(int movieId, int hallId, LocalDateTime startTime, float ticketPrice);
     void deleteProjection(int projectionId);
-    List<Projection> getAllProjectionsByDateAndTheaterId(LocalDate time, int theaterId);
-    List<Projection> getAllProjectionsByDateAndTheaterId2(LocalDate time, int theaterId);
+    Projection updateProjectionById(int id, Projection projection);
     List<Projection> getAllProjectionsBetweenDates(LocalDate date1, LocalDate date2);
 }

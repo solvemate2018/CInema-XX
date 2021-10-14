@@ -1,5 +1,7 @@
 package com.future.cinemaxx.services.movies;
 
+import com.future.cinemaxx.entities.Category;
+import com.future.cinemaxx.entities.Genre;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.repositories.CategoryRepo;
 import com.future.cinemaxx.repositories.GenreRepo;
@@ -44,4 +46,32 @@ public class MovieServiceImpl implements MovieServiceInterface {
         if(!movieRepo.existsById(movieId)) throw new ResourceNotFoundException();
         movieRepo.deleteById(movieId);
     }
+
+    @Override
+    public void updateMovie(int id, Movie movie) {
+        Movie updatedMovie = movieRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException());
+
+        if (movie.getName()!=null){ updatedMovie.setName(movie.getName()); }
+        if (movie.getDuration()!=null){ updatedMovie.setDuration(movie.getDuration()); }
+
+        if (movie.getGenre()!=null){
+            Genre genre = genreRepo.findGenreByName(movie.getGenre().getName());
+            if(genre==null){
+                throw new ResourceNotFoundException();
+            }else{
+                updatedMovie.setGenre(genre);
+            }
+        }
+        if (movie.getCategory()!=null){
+            Category category = categoryRepo.findCategoryByName(movie.getCategory().getName());
+            if(category==null){
+                throw new ResourceNotFoundException();
+            }else{
+                updatedMovie.setCategory(category);
+            }
+        }
+        movieRepo.save(updatedMovie);
+    }
+
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CinemaHallRepo extends JpaRepository<CinemaHall, Integer> {
+    CinemaHall findCinemaHallByName(String name);
 }
