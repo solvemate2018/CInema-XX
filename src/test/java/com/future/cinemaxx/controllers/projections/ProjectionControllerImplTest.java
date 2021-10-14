@@ -38,6 +38,7 @@ class ProjectionControllerImplTest {
     private final HttpHeaders headers = new HttpHeaders();
     @LocalServerPort
     private int port;
+    @Autowired
     TestRestTemplate restTemplate;
 
     //Used to set up mock data for testing
@@ -106,8 +107,6 @@ class ProjectionControllerImplTest {
 
     }
 
-    //UNFINISHED.. WIERD ERROR
-
     @Test
     void getByDateAndTheaterId() {
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
@@ -133,6 +132,26 @@ class ProjectionControllerImplTest {
 
     @Test
     void getProjectionsBetweenDates() {
+        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        LocalDate dateFrom = LocalDate.parse("2025-11-12");
+        LocalDate dateTo = LocalDate.parse("2025-11-14");
+        int id = ids[0].get(1);
+        String url = makeUrl(BASE_PATH+"/theater/{id}/getByTwoDates");
+        Map<String, Integer> urlParams = new HashMap<>();
+        urlParams.put("id", id);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
+                .queryParam("dateFrom", dateFrom)
+                .queryParam("dateTo",dateTo);
+
+        System.out.println(builder.buildAndExpand(urlParams).toUri());
+
+        ResponseEntity<List<ProjectionDTO>> response = restTemplate.exchange(builder
+                        .buildAndExpand(urlParams).toUri(),HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<ProjectionDTO>>(){});
+        assertEquals(3, response.getBody().size());
+        assertEquals("Deadpool",response.getBody().get(2).getMovie().getName());
     }
 
     private String makeUrl(String path){

@@ -11,13 +11,16 @@ import java.util.List;
 public class TestDataMaker {
 
     public static ArrayList<Integer>[] makeDataForTests(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo, CategoryRepo categoryRepo,
+
                                                         GenreRepo genreRepo, MovieRepo movieRepo, ProjectionRepo projectionRepo) {
-        theaterRepo.deleteAll();
-        cinemaHallRepo.deleteAll();
+        projectionRepo.deleteAll();
+        movieRepo.deleteAll();
         categoryRepo.deleteAll();
         genreRepo.deleteAll();
-        movieRepo.deleteAll();
-        projectionRepo.deleteAll();
+        cinemaHallRepo.deleteAll();
+        theaterRepo.deleteAll();
+
+
 
         ArrayList<Integer>[] ids = new ArrayList[2];
 

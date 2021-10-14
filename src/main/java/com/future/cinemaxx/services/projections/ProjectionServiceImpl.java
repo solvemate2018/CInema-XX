@@ -81,11 +81,8 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     @Override
     public List<Projection> getByDateAndTheaterId(int theaterId, LocalDate date) {
 
-        List<Projection> projections = projectionRepo.getProjectionsByStartTime(date);
-        projections = projections.stream().filter
-                (projection -> projection
-                        .getHall().getTheater()
-                        .getId() == theaterId).collect(Collectors.toList());
+        List<Projection> projections = projectionRepo
+                .getProjectionsByHall_Theater_IdAndStartTimeBetween(theaterId, date.atStartOfDay(), date.plusDays(1).atStartOfDay());
         if (projections.isEmpty()) {
             throw new ResourceNotFoundException("There are no projection in the cinema with id: " +
                     theaterId + " on " + date);
@@ -104,18 +101,5 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
                     theaterId + " between " + dateFrom + " and " + dateTo);
         }
         return projections;
-    }
-
-    // helper method for checking if a date as a String has a valid format
-
-    private boolean isDateValid(String date){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false);
-        try {
-            dateFormat.parse(date);
-        } catch (Exception ignored) {
-            return false;
-        }
-        return true;
     }
 }
