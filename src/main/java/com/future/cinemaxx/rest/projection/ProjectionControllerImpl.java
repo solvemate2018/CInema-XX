@@ -67,7 +67,16 @@ public class ProjectionControllerImpl implements ProjectionControllerInterface{
     }
 
     @Override
-    public void updateProjection(int id, ProjectionDTO projectionDTO) {
-    projectionService.updateProjectionById(id, dtoConverter.convertToProjection(projectionDTO));
+    public ProjectionDTO updateProjection(int id, ProjectionDTO projectionDTO) {
+    return dtoConverter.convertToProjectionDTO(projectionService.updateProjectionById(
+            id, dtoConverter.convertToProjection(projectionDTO)));
     }
+
+    @Override
+    public ProjectionDTO createProjection(int movieId, int hallId, ProjectionDTO projectionDTO) {
+        return dtoConverter.convertToProjectionDTO(projectionService.createProjection(dtoConverter.convertToProjection(projectionDTO),
+                movieId, hallId));
+    }
+
+
 }

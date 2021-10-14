@@ -50,7 +50,7 @@ public class MovieServiceImpl implements MovieServiceInterface {
     @Override
     public Movie updateMovie(int id, Movie movie) {
         Movie updatedMovie = movieRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException());
+                .orElseThrow(() -> new ResourceNotFoundException("Movie with this id does not exist"));
 
         if (movie.getName()!=null){ updatedMovie.setName(movie.getName()); }
         if (movie.getDuration()!=null){ updatedMovie.setDuration(movie.getDuration()); }
@@ -58,7 +58,7 @@ public class MovieServiceImpl implements MovieServiceInterface {
         if (movie.getGenre()!=null){
             Genre genre = genreRepo.findGenreByName(movie.getGenre().getName());
             if(genre==null){
-                throw new ResourceNotFoundException();
+                throw new ResourceNotFoundException("Genre with this name does not exist");
             }else{
                 updatedMovie.setGenre(genre);
             }
@@ -66,7 +66,7 @@ public class MovieServiceImpl implements MovieServiceInterface {
         if (movie.getCategory()!=null){
             Category category = categoryRepo.findCategoryByName(movie.getCategory().getName());
             if(category==null){
-                throw new ResourceNotFoundException();
+                throw new ResourceNotFoundException("The category with this name does not exist");
             }else{
                 updatedMovie.setCategory(category);
             }

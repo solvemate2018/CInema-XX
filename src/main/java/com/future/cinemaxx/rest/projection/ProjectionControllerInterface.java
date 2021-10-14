@@ -37,5 +37,10 @@ public interface ProjectionControllerInterface {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void updateProjection( @PathVariable("id") int id, @RequestBody ProjectionDTO projectionDTO);
+    ProjectionDTO updateProjection( @PathVariable("id") int id, @RequestBody ProjectionDTO projectionDTO);
+
+    @PostMapping("/movie/{movieId}/hall/{hallId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    ProjectionDTO createProjection(@PathVariable int movieId, @PathVariable int hallId,
+                                   @RequestBody ProjectionDTO projectionDTO);
 }

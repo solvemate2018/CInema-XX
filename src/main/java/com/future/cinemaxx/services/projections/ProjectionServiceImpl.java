@@ -1,5 +1,7 @@
 package com.future.cinemaxx.services.projections;
 
+import com.future.cinemaxx.dtos.ProjectionDTO;
+import com.future.cinemaxx.dtos.converter.DTOConverter;
 import com.future.cinemaxx.entities.CinemaHall;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.entities.Projection;
@@ -7,6 +9,7 @@ import com.future.cinemaxx.repositories.CinemaHallRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,8 @@ import java.util.List;
 @Service
 public class ProjectionServiceImpl implements ProjectionServiceInterface {
 
+    @Autowired
+    DTOConverter dtoConverter;
 
     MovieServiceImpl movieService;
     ProjectionRepo projectionRepo;
@@ -102,10 +107,11 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
-    public Projection createProjection(int movieId, int hallId, LocalDateTime startTime, float ticketPrice) {
-        Movie movie = movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("There is no movie with id: " + movieId));
-        CinemaHall hall = hallRepo.findById(hallId).orElseThrow(() -> new ResourceNotFoundException("There is no cinema hall with id: " + movieId));
-        return projectionRepo.save(new Projection(startTime, ticketPrice, hall, movie));
+    public Projection createProjection(Projection projection, int movieId, int hallId) {
+         return projectionRepo.save(new Projection(projection.getStartTime(),
+                 projection.getTicketPrice(),
+                 hallRepo.findById(hallId).orElseThrow(() -> new ResourceNotFoundException("Cinema hall with this id does not exist:"+movieId)),
+                 movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie  with this id does not exist:"+hallId))));
     }
 
     @Override
@@ -117,7 +123,8 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     @Override
     public Projection updateProjectionById(int id, Projection projection) {
         Projection updatedProjection = projectionRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException());
+                .orElseThrow(() -> new ResourceNotFoundException("There is no cinema hall with id " + id));
+
         if (projection.getStartTime() != null) {
             updatedProjection.setStartTime(projection.getStartTime());
         }
@@ -127,15 +134,19 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
         if (projection.getHall() != null) {
             CinemaHall cinemaHall = hallRepo.findCinemaHallByName(projection.getHall().getName());
             if (cinemaHall == null) {
-                throw new ResourceNotFoundException();
+                throw new ResourceNotFoundException("There is no cinema hall with name"+projection.getHall().getName());
             } else {
                 updatedProjection.setHall(cinemaHall);
             }
         }
         if (projection.getMovie() != null) {
-            movieService.updateMovie(projection.getMovie().getId(), projection.getMovie());
+            Movie movie = movieRepo.findMovieByName(projection.getMovie().getName());
+             if (movie == null){
+                 throw new ResourceNotFoundException("There is no movie with name "+projection.getMovie().getName());
+             }else {
+                 updatedProjection.setMovie(movie);
+             }
         }
-
-        return updatedProjection;
+        return projectionRepo.save(updatedProjection);
     }
 }
