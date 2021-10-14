@@ -17,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,11 +31,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase
 @EnableAutoConfiguration
+//@TestPropertySource(locations = "classpath")
 @SpringBootTest(classes = {com.future.cinemaxx.CinemaxxApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ProjectionControllerImplTest {
 
-    private final String BASE_PATH = "/api/projections";
+    private final String BASE_PATH = "/api/projection";
     private final HttpHeaders headers = new HttpHeaders();
     @LocalServerPort
     private int port;

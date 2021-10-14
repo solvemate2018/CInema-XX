@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/projection/")
+@RequestMapping("/api/projection")
 public class ProjectionControllerImpl implements ProjectionControllerInterface{
     ProjectionServiceInterface projectionService;
     DTOConverter dtoConverter;
