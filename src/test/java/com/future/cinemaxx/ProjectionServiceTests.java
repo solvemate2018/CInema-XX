@@ -1,5 +1,7 @@
 package com.future.cinemaxx;
 
+import com.future.cinemaxx.entities.CinemaHall;
+import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.entities.Projection;
 import com.future.cinemaxx.repositories.*;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
@@ -10,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -72,6 +76,15 @@ public class ProjectionServiceTests {
         projectionNew.setMovie(null);
         projectionService.updateProjectionById(100,projectionNew);
         assertEquals(null,projectionService.getById(100).getMovie());
+    }
+
+    @Test
+    @Sql("/createMovies.sql")
+    void createProjection(){
+        long countBefore = projectionRepo.count();
+        projectionService.createProjection(new Projection(LocalDateTime.now(),22, new CinemaHall(),new Movie()),100,1);
+        long countAfter = projectionRepo.count();
+        assertEquals(countBefore+1, countAfter);
     }
 
 }
