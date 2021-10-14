@@ -21,7 +21,6 @@ public class TestDataMaker {
         theaterRepo.deleteAll();
 
 
-
         ArrayList<Integer>[] ids = new ArrayList[2];
 
         ArrayList<Integer> theaterIds = new ArrayList<>();

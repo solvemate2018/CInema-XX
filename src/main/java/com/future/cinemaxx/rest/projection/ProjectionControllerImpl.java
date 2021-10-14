@@ -16,9 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/projection")
 public class ProjectionControllerImpl implements ProjectionControllerInterface{
+
     ProjectionServiceInterface projectionService;
     DTOConverter dtoConverter;
 
+    @Autowired
     public ProjectionControllerImpl(ProjectionServiceInterface projectionService, DTOConverter dtoConverter){
         this.projectionService = projectionService;
         this.dtoConverter = dtoConverter;
