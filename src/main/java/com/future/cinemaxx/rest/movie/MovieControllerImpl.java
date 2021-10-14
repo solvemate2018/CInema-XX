@@ -45,6 +45,6 @@ public class MovieControllerImpl implements MovieControllerInterface{
 
     @Override
     public MovieDTO update(int id, MovieDTO movieDTO) {
-    return dtoConverter.convertToMovieDTO(movieService.updateMovie(id,dtoConverter.convertToMovie(movieDTO)));
+        return dtoConverter.convertToMovieDTO(movieService.updateMovie(id,dtoConverter.convertToMovie(movieDTO)));
     }
 }

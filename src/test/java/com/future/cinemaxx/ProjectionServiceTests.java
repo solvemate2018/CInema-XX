@@ -35,7 +35,7 @@ public class ProjectionServiceTests {
 
     @BeforeEach
     public void initService(){
-        movieService = new MovieServiceImpl(movieRepo,genreRepo,categoryRepo);
+        movieService = new MovieServiceImpl(movieRepo,genreRepo,categoryRepo, projectionRepo);
         projectionService = new ProjectionServiceImpl(projectionRepo,movieRepo,cinemaHallRepo,movieService);
 
     }

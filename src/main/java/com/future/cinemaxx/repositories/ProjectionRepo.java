@@ -1,5 +1,6 @@
 package com.future.cinemaxx.repositories;
 
+import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.entities.Projection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,6 @@ public interface ProjectionRepo extends JpaRepository<Projection, Integer> {
     List<Projection> getProjectionsByHall_Theater_IdAndHall_Name(int theaterId, String hallName);
 
     List<Projection> getProjectionByHall_Id(int hallId);
+
+    Boolean existsByMovie(Movie movie);
 }

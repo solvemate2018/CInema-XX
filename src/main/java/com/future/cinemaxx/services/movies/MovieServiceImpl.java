@@ -6,6 +6,7 @@ import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.repositories.CategoryRepo;
 import com.future.cinemaxx.repositories.GenreRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
+import com.future.cinemaxx.repositories.ProjectionRepo;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,15 @@ import java.util.List;
 @Service
 public class MovieServiceImpl implements MovieServiceInterface {
     MovieRepo movieRepo;
+    ProjectionRepo projectionRepo;
     GenreRepo genreRepo;
     CategoryRepo categoryRepo;
 
-    public MovieServiceImpl(MovieRepo movieRepo, GenreRepo genreRepo, CategoryRepo categoryRepo){
+    public MovieServiceImpl(MovieRepo movieRepo, GenreRepo genreRepo, CategoryRepo categoryRepo, ProjectionRepo projectionRepo){
         this.movieRepo = movieRepo;
         this.genreRepo = genreRepo;
         this.categoryRepo = categoryRepo;
+        this.projectionRepo = projectionRepo;
     }
 
     @Override
@@ -43,7 +46,9 @@ public class MovieServiceImpl implements MovieServiceInterface {
 
     @Override
     public void deleteMovie(int movieId) {
-        if(!movieRepo.existsById(movieId)) throw new ResourceNotFoundException();
+        if(projectionRepo.existsByMovie(
+                movieRepo.findById(movieId).orElseThrow(()-> new ResourceNotFoundException())))
+            throw new IllegalStateException("There are projections using this movie");
         movieRepo.deleteById(movieId);
     }
 

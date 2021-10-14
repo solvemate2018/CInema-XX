@@ -10,6 +10,7 @@ import com.future.cinemaxx.entities.Projection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,13 +24,16 @@ public class DTOConverter {
 
     public MovieDTO convertToMovieDTO(Movie movie){
         MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+        movieDTO.setDurationInMinutes((int)movie.getDuration().toMinutes());
         movieDTO.setCategory(modelMapper.map(movie.getCategory(), CategoryDTO.class));
         movieDTO.setGenre(modelMapper.map(movie.getGenre(), GenreDTO.class));
         return movieDTO;
     }
 
     public Movie convertToMovie(MovieDTO movieDTO){
-        return modelMapper.map(movieDTO, Movie.class);
+        Movie movie = modelMapper.map(movieDTO, Movie.class);
+        movie.setDuration(Duration.ofMinutes(movieDTO.getDurationInMinutes()));
+        return movie;
     }
 
     public TheaterDTO convertToTheaterDTO(Theater theater){
