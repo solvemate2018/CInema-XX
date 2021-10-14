@@ -78,8 +78,7 @@ public class DTOConverter {
     public Projection convertToProjection(ProjectionDTO projectionDTO){return modelMapper.map(projectionDTO,Projection.class);}
 
     public CategoryDTO convertToCategoryDTO(Category category){
-        CategoryDTO categoryDTO = modelMapper.map(category,CategoryDTO.class);
-        return categoryDTO;
+        return modelMapper.map(category,CategoryDTO.class);
     }
 
     public Category covertToCategory(CategoryDTO categoryDTO){return modelMapper.map(categoryDTO, Category.class);}
