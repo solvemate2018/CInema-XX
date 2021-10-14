@@ -19,8 +19,24 @@ public class CategoryServiceImpl implements CategoryServiceInterface {
     public List<Category> getAllCategories() {return categoryRepo.findAll();}
 
     @Override
-    public Category addCategory(String name, int ageLimit) {
-        return categoryRepo.save(new Category(name,ageLimit));
+    public Category getById(int id) {
+        return categoryRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no category with id:" + id));
+    }
+
+    @Override
+    public Category create(Category category) {
+        if(categoryRepo.existsByName(category.getName())){
+            throw new IllegalArgumentException("A category with name: "+ category.getName()+" already exists");}
+        return categoryRepo.save(category);
+    }
+
+    @Override
+    public Category updateCategory(int categoryId, Category category) {
+        Category updatedCategory = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException());
+        if(category.getName()!=null){updatedCategory.setName(category.getName());}
+        if(category.getAgeLimit()>0){updatedCategory.setAgeLimit(category.getAgeLimit());}
+        return categoryRepo.save(updatedCategory);
     }
 
     @Override

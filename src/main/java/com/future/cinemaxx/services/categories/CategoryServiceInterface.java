@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface CategoryServiceInterface {
     List<Category> getAllCategories();
-    Category addCategory(String name, int ageLimit);
+    Category getById(int id);
+    Category create(Category category);
+    Category updateCategory(int categoryId, Category category);
     void deleteCategory(int id);
 }
