@@ -17,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,9 +32,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase
 @EnableAutoConfiguration
-//@TestPropertySource(locations = "classpath")
 @SpringBootTest(classes = {com.future.cinemaxx.CinemaxxApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WithMockUser
 class ProjectionControllerImplTest {
 
     private final String BASE_PATH = "/api/projection";
