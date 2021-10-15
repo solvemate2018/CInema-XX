@@ -22,7 +22,7 @@ import java.util.List;
 
 @Service
 public class MovieServiceImpl implements MovieServiceInterface {
-    @Value("app.ImdbApiKey")
+    @Value("${app.ImdbApiKey}")
     private String apiKey;
 
     MovieRepo movieRepo;
@@ -96,8 +96,8 @@ public class MovieServiceImpl implements MovieServiceInterface {
 
     @Override
     public MovieDetails getMovieDetails(int movieId) throws JsonProcessingException {
-        String title = movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException()).getName();
-        String searchForMovieUrl = "https://imdb-api.com/en/API/Search/" + apiKey + "/" + title;
+        Movie movie = movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException());
+        String searchForMovieUrl = "https://imdb-api.com/en/API/Search/" + apiKey + "/" + movie.getName();
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> searchResponse = restTemplate.getForEntity(searchForMovieUrl, String.class);
         JsonNode searchRoot = objectMapper.readTree(searchResponse.getBody());
