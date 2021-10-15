@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoConfiguration
 @SpringBootTest(classes = {com.future.cinemaxx.CinemaxxApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = {"classpath:application-test.properties"})
 @WithMockUser
 class ProjectionControllerImplTest {
 
