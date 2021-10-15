@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtUtils {
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-	@Value("${app.secretkey:FUCK}")
+	@Value("${app.secretkey:HelloWorld}")
 	private String jwtSecret;
 
 	@Value("${app.jwtExpirationMs:1}")
