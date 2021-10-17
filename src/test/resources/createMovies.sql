@@ -4,6 +4,7 @@ INSERT INTO movie (id,duration,name,category_id,genre_id) values (101,100,'bbb2'
 INSERT INTO movie (id,duration,name,category_id,genre_id) values (102,200,'bbb3',null,null);
 
 INSERT INTO genre (name) values ('horror');
+INSERT INTO cinema_hall (id,name,number_of_columns,number_of_rows,theater_id) values (1,'A',3,3,null);
 
 INSERT INTO projection (id,start_time,ticket_price,hall_id,movie_id) values (100,CURRENT_TIMESTAMP,20,null,null);
 INSERT INTO projection (id,start_time,ticket_price,hall_id,movie_id) values (101,CURRENT_TIMESTAMP,30,null,null);
