@@ -122,4 +122,13 @@ public class TestDataMaker {
         categories.add(categoryRepo.save(new Category("D", 18)).getId());
         return categories;
     }
+    public static ArrayList<Integer> setUpGenres(GenreRepo genreRepo){
+        genreRepo.deleteAll();
+        ArrayList<Integer> genres = new ArrayList<Integer>();
+        genres.add(genreRepo.save(new Genre("Horror")).getId());
+        genres.add( genreRepo.save(new Genre("Comedy")).getId());
+        genres.add( genreRepo.save(new Genre("Drama")).getId());
+        genres.add( genreRepo.save(new Genre("Fantasy")).getId());
+        return genres;
+    }
 }
