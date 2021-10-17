@@ -8,5 +8,6 @@ public interface GenreServiceInterface {
     List<Genre> getAllGenres();
     Genre getGenreById(int id);
     Genre createGenre(Genre genre);
+    Genre updateGenre(int genreId, Genre genre);
     void deleteGenre(int genreId);
 }
