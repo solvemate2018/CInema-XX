@@ -2,6 +2,9 @@ package com.future.cinemaxx.configuration;
 
 import com.future.cinemaxx.entities.*;
 import com.future.cinemaxx.repositories.*;
+import com.future.cinemaxx.security.entities.ERole;
+import com.future.cinemaxx.security.entities.Role;
+import com.future.cinemaxx.security.repositories.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +21,7 @@ public class DataSetup implements CommandLineRunner {
     ProjectionRepo projectionRepo;
     TheaterRepo theaterRepo;
     TicketRepo ticketRepo;
+    RoleRepository roleRepository;
 
     public DataSetup(CategoryRepo categoryRepo,
                      CinemaHallRepo cinemaHallRepo,
@@ -25,7 +29,8 @@ public class DataSetup implements CommandLineRunner {
                      MovieRepo movieRepo,
                      ProjectionRepo projectionRepo,
                      TheaterRepo theaterRepo,
-                     TicketRepo ticketRepo){
+                     TicketRepo ticketRepo,
+                     RoleRepository roleRepository){
         this.categoryRepo = categoryRepo;
         this.cinemaHallRepo = cinemaHallRepo;
         this.genreRepo = genreRepo;
@@ -33,10 +38,24 @@ public class DataSetup implements CommandLineRunner {
         this.projectionRepo = projectionRepo;
         this.theaterRepo = theaterRepo;
         this.ticketRepo = ticketRepo;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        Role adminRole = new Role();
+        adminRole.setName(ERole.ROLE_ADMIN);
+
+        Role customerRole = new Role();
+        customerRole.setName(ERole.ROLE_CUSTOMER);
+
+        Role managerRole = new Role();
+        managerRole.setName(ERole.ROLE_MANAGER);
+
+        roleRepository.save(adminRole);
+        roleRepository.save(customerRole);
+        roleRepository.save(managerRole);
+
         Theater theater = theaterRepo.save(new Theater("Cinema city", "Copenhagen", "Husumtorv", 25));
         Theater theater1 = theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test",11));
 

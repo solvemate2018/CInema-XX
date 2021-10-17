@@ -118,7 +118,6 @@ public class AuthController {
 					roles.add(customerRole);
 
 					break;
-				//TODO make customer the default scenario
 				default:
 					customerRole = roleRepository.findByName(ERole.ROLE_MOVIE)
 							.orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE));
