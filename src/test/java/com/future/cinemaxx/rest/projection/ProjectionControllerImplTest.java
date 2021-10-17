@@ -12,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.expression.spel.ast.Projection;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.event.annotation.AfterTestClass;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
@@ -76,13 +72,17 @@ class ProjectionControllerImplTest {
     }
 
     @AfterTestClass
-    void clear(){
+    public void clear(){
         TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
+    }
+
+    @BeforeEach
+    void createData(){
+        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
     }
 
     @Test
     void getAll() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         ResponseEntity<List<ProjectionDTO>> response = getResponseFromAllProjections();
         assertEquals(20,response.getBody().size());
         assertEquals(response.getBody().get(0).getMovie().getName(), "Scary movie");
@@ -90,7 +90,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void getById() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
         ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids[3].get(3)),
                 HttpMethod.GET,
@@ -102,7 +101,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void getByTheaterId() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
         ResponseEntity<List<ProjectionDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH+"/theater/"+ids[0].get(0)),
                 HttpMethod.GET,
@@ -117,7 +115,6 @@ class ProjectionControllerImplTest {
     }
     @Test
     void getByHallId() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
         ResponseEntity<List<ProjectionDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH+"/hall/"+ids[1].get(0)),
                 HttpMethod.GET,
@@ -131,7 +128,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void getByTheaterIdAndHallName() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
         ResponseEntity<List<ProjectionDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH+"/theater/"+ids[0].get(0)+"/hall/A"),
                 HttpMethod.GET,
@@ -145,7 +141,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void getByDateAndTheaterId() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
         LocalDate date = LocalDate.parse("2025-11-12");
         int id = ids[0].get(1);
@@ -168,7 +163,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void getProjectionsBetweenDates() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
         LocalDate dateFrom = LocalDate.parse("2025-11-12");
         LocalDate dateTo = LocalDate.parse("2025-11-14");
@@ -193,7 +187,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void deleteProjectionById() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
         ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids[3].get(0)),
                 HttpMethod.DELETE,
@@ -205,7 +198,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void updateProjection() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         LocalDateTime time = LocalDateTime.parse("2021-11-27T12:30:00");
         int id = ids[3].get(0);
         ProjectionDTO projectionToEdit = new ProjectionDTO();
@@ -233,7 +225,6 @@ class ProjectionControllerImplTest {
 
     @Test
     void createProjection() {
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
         LocalDateTime time = LocalDateTime.parse("2029-11-11T12:30:00");
         ProjectionDTO newProjection = new ProjectionDTO();
         newProjection.setStartTime(time);
@@ -253,7 +244,6 @@ class ProjectionControllerImplTest {
 
     private String makeUrl(String path){
         String pathBuilt = "http://localhost:"+port+path;
-        System.out.println(pathBuilt);
         return pathBuilt;
     }
 

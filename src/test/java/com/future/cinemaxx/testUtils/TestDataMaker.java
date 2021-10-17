@@ -112,4 +112,14 @@ public class TestDataMaker {
         ids[3] = projectionsIds;
         return ids;
     }
+
+    public static ArrayList<Integer> setUpCategories(CategoryRepo categoryRepo){
+        categoryRepo.deleteAll();
+        ArrayList<Integer> categories = new ArrayList<Integer>();
+        categories.add(categoryRepo.save(new Category("A", 8)).getId());
+        categories.add(categoryRepo.save(new Category("B", 12)).getId());
+        categories.add(categoryRepo.save(new Category("C", 16)).getId());
+        categories.add(categoryRepo.save(new Category("D", 18)).getId());
+        return categories;
+    }
 }
