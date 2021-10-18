@@ -63,12 +63,12 @@ public class DataSetup implements CommandLineRunner {
         Theater theater = theaterRepo.save(new Theater("Cinema city", "Copenhagen", "Husumtorv", 25));
         Theater theater1 = theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test",11));
 
-        CinemaHall cinemaHall1 = cinemaHallRepo.save(new CinemaHall("A", 2, 3, theater));
-        CinemaHall cinemaHall2 = cinemaHallRepo.save(new CinemaHall("B", 2, 3, theater));
-        CinemaHall cinemaHall3 = cinemaHallRepo.save(new CinemaHall("C", 2, 3, theater));
-        CinemaHall cinemaHall4 = cinemaHallRepo.save(new CinemaHall("A", 2, 3, theater1));
-        CinemaHall cinemaHall5 = cinemaHallRepo.save(new CinemaHall("B", 3, 2, theater1));
-        CinemaHall cinemaHall6 = cinemaHallRepo.save(new CinemaHall("C", 4, 2, theater1));
+        CinemaHall cinemaHall1 = cinemaHallRepo.save(new CinemaHall("A", 2, 2, theater));
+        CinemaHall cinemaHall2 = cinemaHallRepo.save(new CinemaHall("B", 2, 2, theater));
+        CinemaHall cinemaHall3 = cinemaHallRepo.save(new CinemaHall("C", 2, 2, theater));
+        CinemaHall cinemaHall4 = cinemaHallRepo.save(new CinemaHall("A", 2, 2, theater1));
+        CinemaHall cinemaHall5 = cinemaHallRepo.save(new CinemaHall("B", 2, 2, theater1));
+        CinemaHall cinemaHall6 = cinemaHallRepo.save(new CinemaHall("C", 2, 2, theater1));
 
         Category category1 = categoryRepo.save(new Category("A", 8));
         Category category2 = categoryRepo.save(new Category("B", 12));
