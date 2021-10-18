@@ -3,6 +3,7 @@ package com.future.cinemaxx.rest.projection;
 import com.future.cinemaxx.dtos.ProjectionDTO;
 import com.future.cinemaxx.repositories.*;
 import com.future.cinemaxx.testUtils.TestDataMaker;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,7 @@ class ProjectionControllerImplTest {
         this.ticketRepo = ticketRepo;
     }
 
-    @AfterTestClass
+    @AfterEach
     public void clear(){
         TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
     }
