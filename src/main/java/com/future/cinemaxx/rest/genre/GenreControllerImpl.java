@@ -1,5 +1,6 @@
 package com.future.cinemaxx.rest.genre;
 
+import com.future.cinemaxx.dtos.CategoryDTO;
 import com.future.cinemaxx.dtos.GenreDTO;
 import com.future.cinemaxx.dtos.converter.DTOConverter;
 import com.future.cinemaxx.services.genres.GenreServiceInterface;
@@ -41,10 +42,14 @@ public class GenreControllerImpl implements GenreControllerInterface {
 
     }
 
-
     @Override
     public void delete(int id) {
         genreService.deleteGenre(id);
 
+    }
+
+    @Override
+    public GenreDTO update(int id, GenreDTO genreDTO) {
+        return dtoConverter.convertToGenreDTO(genreService.updateGenre(id, dtoConverter.convertToGenre(genreDTO)));
     }
 }

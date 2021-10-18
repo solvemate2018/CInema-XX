@@ -1,4 +1,4 @@
-package com.future.cinemaxx.controllers.projections;
+package com.future.cinemaxx.rest.projection;
 
 import com.future.cinemaxx.dtos.ProjectionDTO;
 import com.future.cinemaxx.repositories.*;
@@ -12,17 +12,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.expression.spel.ast.Projection;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.web.util.UriComponents;
+import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,12 +71,15 @@ class ProjectionControllerImplTest {
         this.restTemplate = restTemplate;
     }
 
-
-    @BeforeEach
-    public void setUpData(){
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
+    @AfterTestClass
+    public void clear(){
+        TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
     }
 
+    @BeforeEach
+    void createData(){
+        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
+    }
 
     @Test
     void getAll() {
@@ -88,7 +91,7 @@ class ProjectionControllerImplTest {
     @Test
     void getById() {
         HttpEntity<String> entity = new HttpEntity<>(null,headers);
-        ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids[1].get(3)),
+        ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids[3].get(3)),
                 HttpMethod.GET,
                 entity,
                 ProjectionDTO.class);
@@ -109,6 +112,31 @@ class ProjectionControllerImplTest {
         assertEquals("B",response.getBody().get(5).getCinemaHallName());
         assertEquals(9,response.getBody().size());
 
+    }
+    @Test
+    void getByHallId() {
+        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        ResponseEntity<List<ProjectionDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH+"/hall/"+ids[1].get(0)),
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<ProjectionDTO>>(){});
+        assertEquals("Scary movie",response.getBody().get(0).getMovie().getName());
+        assertEquals("Spider-man",response.getBody().get(1).getMovie().getName());
+        assertEquals("A",response.getBody().get(0).getCinemaHallName());
+        assertEquals(4,response.getBody().size());
+    }
+
+    @Test
+    void getByTheaterIdAndHallName() {
+        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        ResponseEntity<List<ProjectionDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH+"/theater/"+ids[0].get(0)+"/hall/A"),
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<ProjectionDTO>>(){});
+        assertEquals("Scary movie",response.getBody().get(0).getMovie().getName());
+        assertEquals("Spider-man",response.getBody().get(1).getMovie().getName());
+        assertEquals("A",response.getBody().get(0).getCinemaHallName());
+        assertEquals(4,response.getBody().size());
     }
 
     @Test
@@ -132,7 +160,6 @@ class ProjectionControllerImplTest {
 
         assertEquals("Dark Knight", response.getBody().get(0).getMovie().getName());
     }
-
 
     @Test
     void getProjectionsBetweenDates() {
@@ -158,9 +185,65 @@ class ProjectionControllerImplTest {
         assertEquals("Deadpool",response.getBody().get(2).getMovie().getName());
     }
 
+    @Test
+    void deleteProjectionById() {
+        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids[3].get(0)),
+                HttpMethod.DELETE,
+                entity,
+                ProjectionDTO.class);
+        ResponseEntity<List<ProjectionDTO>> res = getResponseFromAllProjections();
+        assertEquals(19,res.getBody().size());
+    }
+
+    @Test
+    void updateProjection() {
+        LocalDateTime time = LocalDateTime.parse("2021-11-27T12:30:00");
+        int id = ids[3].get(0);
+        ProjectionDTO projectionToEdit = new ProjectionDTO();
+        projectionToEdit.setCinemaHallName("C");
+        projectionToEdit.setTicketPrice(200f);
+
+        Map<String, Integer> param = new HashMap<String, Integer>();
+        param.put("id",id);
+
+
+        HttpEntity<ProjectionDTO> entity = new HttpEntity<ProjectionDTO>(projectionToEdit,headers);
+        ResponseEntity<ProjectionDTO> res = restTemplate.exchange(makeUrl(BASE_PATH+"/{id}"),
+                HttpMethod.PUT ,
+                entity,
+                ProjectionDTO.class,
+                param);
+
+        ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+"/"+id),
+                HttpMethod.GET,
+                entity,
+                ProjectionDTO.class);
+        assertEquals(200f,response.getBody().getTicketPrice());
+        assertEquals(response.getBody().getStartTime(),time);
+    }
+
+    @Test
+    void createProjection() {
+        LocalDateTime time = LocalDateTime.parse("2029-11-11T12:30:00");
+        ProjectionDTO newProjection = new ProjectionDTO();
+        newProjection.setStartTime(time);
+        newProjection.setTicketPrice(16f);
+        HttpEntity<ProjectionDTO> entity = new HttpEntity<ProjectionDTO>(newProjection,headers);
+        ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+"/movie/"+ids[2].get(6)+"/hall/"+ids[1].get(0)),
+                HttpMethod.POST,
+                entity,
+                ProjectionDTO.class);
+        ResponseEntity<List<ProjectionDTO>> res = getResponseFromAllProjections();
+        assertEquals(res.getBody().size(), 21);
+        assertEquals(time,response.getBody().getStartTime());
+        assertEquals("A", response.getBody().getCinemaHallName());
+        assertEquals("Deadpool", response.getBody().getMovie().getName());
+
+    }
+
     private String makeUrl(String path){
         String pathBuilt = "http://localhost:"+port+path;
-        System.out.println(pathBuilt);
         return pathBuilt;
     }
 
@@ -172,5 +255,4 @@ class ProjectionControllerImplTest {
                 new ParameterizedTypeReference<List<ProjectionDTO>>() {});
         return response;
     }
-
 }
