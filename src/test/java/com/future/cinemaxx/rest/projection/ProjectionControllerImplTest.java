@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.event.annotation.AfterTestClass;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -34,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoConfiguration
 @SpringBootTest(classes = {com.future.cinemaxx.CinemaxxApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 @TestPropertySource(locations = {"classpath:application-test.properties"})
 @WithMockUser
 class ProjectionControllerImplTest {
@@ -53,6 +55,7 @@ class ProjectionControllerImplTest {
     ProjectionRepo projectionRepo;
     TheaterRepo theaterRepo;
     GenreRepo genreRepo;
+    TicketRepo ticketRepo;
 
     //Used for storing the ids of theaters and projections no matter what are they generated as
 
@@ -61,7 +64,8 @@ class ProjectionControllerImplTest {
     @Autowired
     public ProjectionControllerImplTest(CategoryRepo categoryRepo, CinemaHallRepo cinemaHallRepo, MovieRepo movieRepo,
                                         ProjectionRepo projectionRepo, TheaterRepo theaterRepo, GenreRepo genreRepo,
-                                        TestRestTemplate restTemplate) {
+
+                                        TicketRepo ticketRepo,TestRestTemplate restTemplate) {
         this.categoryRepo = categoryRepo;
         this.cinemaHallRepo = cinemaHallRepo;
         this.movieRepo = movieRepo;
@@ -69,16 +73,17 @@ class ProjectionControllerImplTest {
         this.theaterRepo = theaterRepo;
         this.genreRepo = genreRepo;
         this.restTemplate = restTemplate;
+        this.ticketRepo = ticketRepo;
     }
 
     @AfterTestClass
     public void clear(){
-        TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
+        TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
     }
 
     @BeforeEach
     void createData(){
-        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo);
+        ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
     }
 
     @Test

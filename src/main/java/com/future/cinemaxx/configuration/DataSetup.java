@@ -7,12 +7,16 @@ import com.future.cinemaxx.security.entities.Role;
 import com.future.cinemaxx.security.repositories.RoleRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Configuration
+@Component
+@Profile("!test")
 public class DataSetup implements CommandLineRunner {
     CategoryRepo categoryRepo;
     CinemaHallRepo cinemaHallRepo;

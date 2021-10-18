@@ -20,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoConfiguration
 @SpringBootTest(classes = {com.future.cinemaxx.CinemaxxApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 @TestPropertySource(locations = {"classpath:application-test.properties"})
 @WithMockUser
 class GenreControllerImplTest {
