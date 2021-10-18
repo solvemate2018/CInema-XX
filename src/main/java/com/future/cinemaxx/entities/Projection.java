@@ -41,7 +41,7 @@ public class Projection{
 
         for(int i = 1; i <= hall.getNumberOfRows(); i++){
             for(int j = 1; j <= hall.getNumberOfColumns(); j++){
-                tickets.add(new Ticket(i, j));
+                tickets.add(new Ticket(i, j, this));
             }
         }
     }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(nullable = false)
     private int ticketRow;
@@ -30,8 +30,9 @@ public class Ticket {
         this.projection=projection;
     }
 
-    public Ticket(int row, int column){
+    public Ticket(int row, int column, Projection projection){
         this.ticketRow= row;
         this.ticketColumn = column;
+        this.projection = projection;
     }
 }

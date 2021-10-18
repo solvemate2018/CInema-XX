@@ -31,6 +31,8 @@ public class ProjectionServiceTests {
     ProjectionRepo projectionRepo;
     @Autowired
     CinemaHallRepo cinemaHallRepo;
+    @Autowired
+    TicketRepo ticketRepo;
 
 
     MovieServiceImpl movieService;
@@ -41,7 +43,7 @@ public class ProjectionServiceTests {
     @BeforeEach
     public void initService(){
         movieService = new MovieServiceImpl(movieRepo,genreRepo,categoryRepo, projectionRepo, new ObjectMapper());
-        projectionService = new ProjectionServiceImpl(projectionRepo,movieRepo,cinemaHallRepo,movieService);
+        projectionService = new ProjectionServiceImpl(projectionRepo,movieRepo,cinemaHallRepo,movieService, ticketRepo);
 
     }
 

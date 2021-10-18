@@ -23,7 +23,7 @@ public class TicketServiceImpl implements TicketServiceInterface{
     }
 
     @Override
-    public Ticket getTicketById(int id) {
+    public Ticket getTicketById(long id) {
         return ticketRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
@@ -36,7 +36,7 @@ public class TicketServiceImpl implements TicketServiceInterface{
     }
 
     @Override
-    public void deleteTicket(int id) {
+    public void deleteTicket(long id) {
     if (ticketRepo.existsById(id)){
         ticketRepo.deleteById(id);
     }else{

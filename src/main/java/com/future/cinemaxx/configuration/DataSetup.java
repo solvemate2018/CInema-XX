@@ -84,7 +84,6 @@ public class DataSetup implements CommandLineRunner {
         Movie movie6 = movieRepo.save(new Movie("Dark Knight",Duration.ofMinutes(220) , genre3, category3));
         Movie movie7 = movieRepo.save(new Movie("Deadpool",Duration.ofMinutes(163) , genre2, category4));
 
-
         Projection projection1 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall1, movie1));
         Projection projection2 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(7), 15.6f, cinemaHall1, movie2));
         Projection projection3 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall3, movie4));
@@ -105,5 +104,26 @@ public class DataSetup implements CommandLineRunner {
         Projection projection18 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall5, movie7));
         Projection projection19 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall6, movie7));
         Projection projection20 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(3), 15.6f, cinemaHall1, movie7));
+
+        ticketRepo.saveAll(projection1.getTickets());
+        ticketRepo.saveAll(projection2.getTickets());
+        ticketRepo.saveAll(projection3.getTickets());
+        ticketRepo.saveAll(projection4.getTickets());
+        ticketRepo.saveAll(projection5.getTickets());
+        ticketRepo.saveAll(projection6.getTickets());
+        ticketRepo.saveAll(projection7.getTickets());
+        ticketRepo.saveAll(projection8.getTickets());
+        ticketRepo.saveAll(projection9.getTickets());
+        ticketRepo.saveAll(projection10.getTickets());
+        ticketRepo.saveAll(projection11.getTickets());
+        ticketRepo.saveAll(projection12.getTickets());
+        ticketRepo.saveAll(projection13.getTickets());
+        ticketRepo.saveAll(projection14.getTickets());
+        ticketRepo.saveAll(projection15.getTickets());
+        ticketRepo.saveAll(projection16.getTickets());
+        ticketRepo.saveAll(projection17.getTickets());
+        ticketRepo.saveAll(projection18.getTickets());
+        ticketRepo.saveAll(projection19.getTickets());
+        ticketRepo.saveAll(projection20.getTickets());
     }
 }

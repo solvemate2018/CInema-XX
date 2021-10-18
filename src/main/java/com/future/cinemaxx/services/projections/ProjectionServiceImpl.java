@@ -8,6 +8,7 @@ import com.future.cinemaxx.entities.Projection;
 import com.future.cinemaxx.repositories.CinemaHallRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
+import com.future.cinemaxx.repositories.TicketRepo;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -34,13 +35,15 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     ProjectionRepo projectionRepo;
     MovieRepo movieRepo;
     CinemaHallRepo hallRepo;
+    TicketRepo ticketRepo;
 
 
-    public ProjectionServiceImpl(ProjectionRepo projectionRepo, MovieRepo movieRepo, CinemaHallRepo hallRepo, MovieServiceImpl movieService) {
+    public ProjectionServiceImpl(ProjectionRepo projectionRepo, MovieRepo movieRepo, CinemaHallRepo hallRepo, MovieServiceImpl movieService, TicketRepo ticketRepo) {
         this.movieRepo = movieRepo;
         this.projectionRepo = projectionRepo;
         this.hallRepo = hallRepo;
         this.movieService = movieService;
+        this.ticketRepo = ticketRepo;
     }
 
     @Override
@@ -108,10 +111,13 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
 
     @Override
     public Projection createProjection(Projection projection, int movieId, int hallId) {
-         return projectionRepo.save(new Projection(projection.getStartTime(),
+         Projection newProjection = new Projection(projection.getStartTime(),
                  projection.getTicketPrice(),
                  hallRepo.findById(hallId).orElseThrow(() -> new ResourceNotFoundException("Cinema hall with this id does not exist:"+movieId)),
-                 movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie  with this id does not exist:"+hallId))));
+                 movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie  with this id does not exist:"+hallId)));
+         Projection result = projectionRepo.save(newProjection);
+         ticketRepo.saveAll(newProjection.getTickets());
+         return result;
     }
 
     @Override
