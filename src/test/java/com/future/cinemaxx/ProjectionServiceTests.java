@@ -5,6 +5,7 @@ import com.future.cinemaxx.entities.Movie;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.future.cinemaxx.entities.Projection;
 import com.future.cinemaxx.repositories.*;
+import com.future.cinemaxx.services.imdb.ImdbMovieServiceInteface;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
 import com.future.cinemaxx.services.projections.ProjectionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,7 @@ public class ProjectionServiceTests {
     @Autowired
     TicketRepo ticketRepo;
 
+    ImdbMovieServiceInteface imdbMovieService;
 
     MovieServiceImpl movieService;
     ProjectionServiceImpl projectionService;
@@ -42,7 +44,7 @@ public class ProjectionServiceTests {
 
     @BeforeEach
     public void initService(){
-        movieService = new MovieServiceImpl(movieRepo,genreRepo,categoryRepo, projectionRepo, new ObjectMapper());
+        movieService = new MovieServiceImpl(movieRepo,genreRepo,categoryRepo, projectionRepo, imdbMovieService);
         projectionService = new ProjectionServiceImpl(projectionRepo,movieRepo,cinemaHallRepo,movieService, ticketRepo);
 
     }

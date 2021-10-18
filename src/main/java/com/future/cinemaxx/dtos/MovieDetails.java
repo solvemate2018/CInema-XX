@@ -24,7 +24,12 @@ public class MovieDetails {
     private String releaseDate;
     private String imDbRating;
     private String runtimeStr;
+    private List<String> posterUrls;
+    private List<String> imageUrls;
+    private String trailerUrl;
+
     private List<ActorsInfo> actorList = new ArrayList<>();
+
 
     public MovieDetails(JsonNode root){
         this.title = root.path("title").asText();
@@ -33,16 +38,13 @@ public class MovieDetails {
         this.imDbRating = root.path("releaseDate").asText();
         this.runtimeStr = root.path("runtimeStr").asText();
         JsonNode actorList = root.get("actorList");
-        try{
             int i = 0;
-            while(true){
+            while(i <= 5){
                 ActorsInfo info = new ActorsInfo();
                 info.setName(actorList.get(i).get("name").asText());
                 info.setAsCharacter(actorList.get(i).get("asCharacter").asText());
                 this.actorList.add(info);
                 i++;
             }
-        }
-        catch(Exception exception){}
     }
 }

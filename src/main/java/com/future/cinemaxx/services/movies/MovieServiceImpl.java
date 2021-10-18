@@ -11,6 +11,7 @@ import com.future.cinemaxx.repositories.CategoryRepo;
 import com.future.cinemaxx.repositories.GenreRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
+import com.future.cinemaxx.services.imdb.ImdbMovieServiceInteface;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -29,16 +30,15 @@ public class MovieServiceImpl implements MovieServiceInterface {
     ProjectionRepo projectionRepo;
     GenreRepo genreRepo;
     CategoryRepo categoryRepo;
-    ObjectMapper objectMapper;
+    ImdbMovieServiceInteface imdbMovieService;
 
     public MovieServiceImpl(MovieRepo movieRepo, GenreRepo genreRepo,
-                            CategoryRepo categoryRepo, ProjectionRepo projectionRepo
-                            , ObjectMapper objectMapper){
+                            CategoryRepo categoryRepo, ProjectionRepo projectionRepo, ImdbMovieServiceInteface imdbMovieService){
         this.movieRepo = movieRepo;
         this.genreRepo = genreRepo;
         this.categoryRepo = categoryRepo;
         this.projectionRepo = projectionRepo;
-        this.objectMapper = objectMapper;
+        this.imdbMovieService = imdbMovieService;
     }
 
     @Override
@@ -96,23 +96,6 @@ public class MovieServiceImpl implements MovieServiceInterface {
 
     @Override
     public MovieDetails getMovieDetails(int movieId) throws JsonProcessingException {
-        Movie movie = movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException());
-        String searchForMovieUrl = "https://imdb-api.com/en/API/Search/" + apiKey + "/" + movie.getName();
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> searchResponse = restTemplate.getForEntity(searchForMovieUrl, String.class);
-        JsonNode searchRoot = objectMapper.readTree(searchResponse.getBody());
-
-        String imDbId = getMovieIdFromJson(searchRoot);
-
-        String getDetailsUrl = "https://imdb-api.com/en/API/Title/" + apiKey + "/" + imDbId;
-        ResponseEntity<String> detailsResponse = restTemplate.getForEntity(getDetailsUrl, String.class);
-        JsonNode detailsRoot = objectMapper.readTree(detailsResponse.getBody());
-        MovieDetails details = new MovieDetails(detailsRoot);
-        return details;
-    }
-
-    private String getMovieIdFromJson(JsonNode searchRoot) {
-        JsonNode searchResults = searchRoot.get("results");
-        return searchResults.get(0).get("id").asText();
+        return imdbMovieService.getMovieDetails(movieId);
     }
 }
