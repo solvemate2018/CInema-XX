@@ -207,15 +207,13 @@ class ProjectionControllerImplTest {
         LocalDateTime time = LocalDateTime.parse("2021-11-27T12:30:00");
         int id = ids[3].get(0);
         ProjectionDTO projectionToEdit = new ProjectionDTO();
-        projectionToEdit.setCinemaHallName("C");
-        projectionToEdit.setTicketPrice(200f);
+        projectionToEdit.setTicketPrice(200);
 
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("id",id);
 
-
         HttpEntity<ProjectionDTO> entity = new HttpEntity<ProjectionDTO>(projectionToEdit,headers);
-        ResponseEntity<ProjectionDTO> res = restTemplate.exchange(makeUrl(BASE_PATH+"/{id}"),
+        ResponseEntity<ProjectionDTO> res = restTemplate.exchange(makeUrl(BASE_PATH+"/{id}/movie/"+ids[2].get(0)+"/hall/"+ids[1].get(0)),
                 HttpMethod.PUT ,
                 entity,
                 ProjectionDTO.class,
@@ -225,7 +223,7 @@ class ProjectionControllerImplTest {
                 HttpMethod.GET,
                 entity,
                 ProjectionDTO.class);
-        assertEquals(200f,response.getBody().getTicketPrice());
+        assertEquals(200,response.getBody().getTicketPrice());
         assertEquals(response.getBody().getStartTime(),time);
     }
 

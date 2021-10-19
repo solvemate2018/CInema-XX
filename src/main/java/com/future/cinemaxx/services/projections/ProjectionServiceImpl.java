@@ -128,7 +128,7 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
-    public Projection updateProjectionById(int id, Projection projection) {
+    public Projection updateProjectionById(int id, int movieId, int hallId, Projection projection) {
         Projection updatedProjection = projectionRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no cinema hall with id " + id));
 
@@ -138,21 +138,15 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
         if (projection.getTicketPrice() != 0) {
             updatedProjection.setTicketPrice(projection.getTicketPrice());
         }
-        if (projection.getHall() != null) {
-            CinemaHall cinemaHall = hallRepo.findCinemaHallByName(projection.getHall().getName());
-            if (cinemaHall == null) {
-                throw new ResourceNotFoundException("There is no cinema hall with name"+projection.getHall().getName());
-            } else {
-                updatedProjection.setHall(cinemaHall);
-            }
+        if (hallId != 0) {
+            CinemaHall cinemaHall = hallRepo.findById(hallId)
+                    .orElseThrow(() -> new ResourceNotFoundException("There is no cinema hall with id" + hallId));
+            updatedProjection.setHall(cinemaHall);
         }
-        if (projection.getMovie() != null) {
-            Movie movie = movieRepo.findMovieByName(projection.getMovie().getName());
-             if (movie == null){
-                 throw new ResourceNotFoundException("There is no movie with name "+projection.getMovie().getName());
-             }else {
+        if (movieId != 0) {
+            Movie movie = movieRepo.findById(movieId)
+                    .orElseThrow(() -> new ResourceNotFoundException("There is no movie with id" + movieId));
                  updatedProjection.setMovie(movie);
-             }
         }
         return projectionRepo.save(updatedProjection);
     }

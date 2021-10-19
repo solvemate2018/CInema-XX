@@ -35,9 +35,10 @@ public interface ProjectionControllerInterface {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteProjectionById(@PathVariable("id") int id);
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/movie/{movieId}/hall/{hallId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    ProjectionDTO updateProjection( @PathVariable("id") int id, @RequestBody ProjectionDTO projectionDTO);
+    ProjectionDTO updateProjection( @PathVariable("id") int id,@PathVariable("movieId") int movieId,
+                                    @PathVariable("hallId") int hallId, @RequestBody ProjectionDTO projectionDTO);
 
     @PostMapping("/movie/{movieId}/hall/{hallId}")
     @ResponseStatus(HttpStatus.CREATED)
