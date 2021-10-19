@@ -1,6 +1,5 @@
 package com.future.cinemaxx.rest.genre;
 
-import com.future.cinemaxx.dtos.CategoryDTO;
 import com.future.cinemaxx.dtos.GenreDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

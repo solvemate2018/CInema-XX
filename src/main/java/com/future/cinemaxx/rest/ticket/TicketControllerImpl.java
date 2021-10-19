@@ -7,26 +7,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ticket")
-public class TicketControllerImpl implements TicketControllerInterface{
+public class TicketControllerImpl implements TicketControllerInterface {
 
     TicketServiceInterface ticketService;
     DTOConverter dtoConverter;
 
     @Autowired
-    public TicketControllerImpl(TicketServiceInterface ticketService, DTOConverter dtoConverter){
+    public TicketControllerImpl(TicketServiceInterface ticketService, DTOConverter dtoConverter) {
         this.ticketService = ticketService;
         this.dtoConverter = dtoConverter;
     }
+
     @Override
     public TicketDTO bookTicket(int projectionId, int row, int column) {
-        return dtoConverter.convertToTicketDTO(ticketService.bookTicket(projectionId,row,column));
+        return dtoConverter.convertToTicketDTO(ticketService.bookTicket(projectionId, row, column));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class TicketControllerImpl implements TicketControllerInterface{
         return dtoConverter.convertToTicketDTO(ticketService.cancelBooking(projectionId,row,column));
     }
 
-    public List<TicketDTO> getAll(){
+    public List<TicketDTO> getAll() {
         return ticketService.getAllTickets().stream().map(ticket -> dtoConverter.convertToTicketDTO(ticket)).collect(Collectors.toList());
     }
 
@@ -45,10 +45,11 @@ public class TicketControllerImpl implements TicketControllerInterface{
     }
 
     @Override
-    public void delete(int id) {}
+    public void delete(int id) {
+    }
 
     public TicketDTO getTicketByProjectionRowAndColumn(int projectionId, int row, int column) {
-        return dtoConverter.convertToTicketDTO(ticketService.getTicketByProjectionRowColumn(projectionId,row,column));
+        return dtoConverter.convertToTicketDTO(ticketService.getTicketByProjectionRowColumn(projectionId, row, column));
     }
 
     @Override

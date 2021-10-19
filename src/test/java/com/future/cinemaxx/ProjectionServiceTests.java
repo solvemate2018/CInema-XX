@@ -61,7 +61,7 @@ public class ProjectionServiceTests {
     void updateProjection(){
         Projection projectionNew = projectionService.getById(100);
         projectionNew.setTicketPrice(99);
-        projectionService.updateProjectionById(100,projectionNew);
+        projectionService.updateProjectionById(100,100,1,projectionNew);
         assertEquals(99,projectionService.getById(100).getTicketPrice());
     }
 
@@ -70,7 +70,7 @@ public class ProjectionServiceTests {
     void updateProjectionMovieField(){
         Projection projectionNew = projectionService.getById(100);
         projectionNew.setMovie(movieRepo.findById(101).get());
-        projectionService.updateProjectionById(100,projectionNew);
+        projectionService.updateProjectionById(100,101,1,projectionNew);
         assertEquals(movieRepo.findById(101).get(),projectionService.getById(100).getMovie());
     }
 
@@ -78,8 +78,7 @@ public class ProjectionServiceTests {
     @Sql("/createMovies.sql")
     void updateProjectionNullField(){
         Projection projectionNew = projectionService.getById(100);
-        projectionNew.setMovie(null);
-        projectionService.updateProjectionById(100,projectionNew);
+        projectionService.updateProjectionById(100,0,1,projectionNew);
         assertEquals(null,projectionService.getById(100).getMovie());
     }
 

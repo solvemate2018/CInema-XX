@@ -1,13 +1,14 @@
 package com.future.cinemaxx.entities;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity @Getter @Setter
+@Entity
+@Getter
+@Setter
 @NoArgsConstructor
 public class Category {
     @Id
@@ -21,7 +22,7 @@ public class Category {
     @Column
     private int ageLimit;
 
-    public Category(String name, int ageLimit){
+    public Category(String name, int ageLimit) {
         this.name = name;
         this.ageLimit = ageLimit;
     }

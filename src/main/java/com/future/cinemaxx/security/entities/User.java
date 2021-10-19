@@ -1,12 +1,15 @@
 package com.future.cinemaxx.security.entities;
 
+import com.future.cinemaxx.entities.Ticket;
+
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class User {
+    @OneToMany(mappedBy = "user")
+    List<Ticket> ticketList = new ArrayList<>();
+
     private long id;
     private String email;
     private String password;

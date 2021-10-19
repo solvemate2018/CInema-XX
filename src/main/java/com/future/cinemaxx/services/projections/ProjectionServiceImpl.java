@@ -1,6 +1,5 @@
 package com.future.cinemaxx.services.projections;
 
-import com.future.cinemaxx.dtos.ProjectionDTO;
 import com.future.cinemaxx.dtos.converter.DTOConverter;
 import com.future.cinemaxx.entities.CinemaHall;
 import com.future.cinemaxx.entities.Movie;
@@ -12,17 +11,10 @@ import com.future.cinemaxx.repositories.TicketRepo;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -110,25 +102,29 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public Projection createProjection(Projection projection, int movieId, int hallId) {
-         Projection newProjection = new Projection(projection.getStartTime(),
-                 projection.getTicketPrice(),
-                 hallRepo.findById(hallId).orElseThrow(() -> new ResourceNotFoundException("Cinema hall with this id does not exist:"+movieId)),
-                 movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie  with this id does not exist:"+hallId)));
-         Projection result = projectionRepo.save(newProjection);
-         ticketRepo.saveAll(newProjection.getTickets());
-         return result;
+        Projection newProjection = new Projection(projection.getStartTime(),
+                projection.getTicketPrice(),
+                hallRepo.findById(hallId).orElseThrow(() -> new ResourceNotFoundException("Cinema hall with this id does not exist:" + movieId)),
+                movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("Movie  with this id does not exist:" + hallId)));
+        Projection result = projectionRepo.save(newProjection);
+        ticketRepo.saveAll(newProjection.getTickets());
+        return result;
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public void deleteProjection(int projectionId) {
-        if (!projectionRepo.existsById(projectionId)) {throw new ResourceNotFoundException();}
+        if (!projectionRepo.existsById(projectionId)) {
+            throw new ResourceNotFoundException();
+        }
         ticketRepo.deleteByProjection_Id(projectionId);
         projectionRepo.deleteById(projectionId);
     }
 
     @Override
-    public Projection updateProjectionById(int id, Projection projection) {
+    public Projection updateProjectionById(int id, int movieId, int hallId, Projection projection) {
         Projection updatedProjection = projectionRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no cinema hall with id " + id));
 
@@ -138,21 +134,15 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
         if (projection.getTicketPrice() != 0) {
             updatedProjection.setTicketPrice(projection.getTicketPrice());
         }
-        if (projection.getHall() != null) {
-            CinemaHall cinemaHall = hallRepo.findCinemaHallByName(projection.getHall().getName());
-            if (cinemaHall == null) {
-                throw new ResourceNotFoundException("There is no cinema hall with name"+projection.getHall().getName());
-            } else {
-                updatedProjection.setHall(cinemaHall);
-            }
+        if (hallId != 0) {
+            CinemaHall cinemaHall = hallRepo.findById(hallId)
+                    .orElseThrow(() -> new ResourceNotFoundException("There is no cinema hall with id" + hallId));
+            updatedProjection.setHall(cinemaHall);
         }
-        if (projection.getMovie() != null) {
-            Movie movie = movieRepo.findMovieByName(projection.getMovie().getName());
-             if (movie == null){
-                 throw new ResourceNotFoundException("There is no movie with name "+projection.getMovie().getName());
-             }else {
+        if (movieId != 0) {
+            Movie movie = movieRepo.findById(movieId)
+                    .orElseThrow(() -> new ResourceNotFoundException("There is no movie with id" + movieId));
                  updatedProjection.setMovie(movie);
-             }
         }
         return projectionRepo.save(updatedProjection);
     }
