@@ -16,7 +16,7 @@ public class Config {
     }
 
     @Bean
-    public DTOConverter dtosConverter(ModelMapper modelMapper){
+    public DTOConverter dtosConverter(ModelMapper modelMapper) {
         return new DTOConverter(modelMapper);
     }
 }

@@ -1,4 +1,5 @@
 package com.future.cinemaxx.dtos;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

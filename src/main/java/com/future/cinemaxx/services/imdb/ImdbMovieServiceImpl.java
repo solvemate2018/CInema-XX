@@ -3,32 +3,28 @@ package com.future.cinemaxx.services.imdb;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.future.cinemaxx.dtos.ActorsInfo;
 import com.future.cinemaxx.dtos.MovieDetails;
 import com.future.cinemaxx.entities.Movie;
 import com.future.cinemaxx.repositories.MovieRepo;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.PushBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ImdbMovieServiceImpl implements ImdbMovieServiceInteface{
-    @Value("${app.ImdbApiKey}")
-    private String apiKey;
-
+public class ImdbMovieServiceImpl implements ImdbMovieServiceInteface {
     MovieRepo movieRepo;
     ObjectMapper objectMapper;
     RestTemplate restTemplate;
+    @Value("${app.ImdbApiKey}")
+    private String apiKey;
 
-    public ImdbMovieServiceImpl(MovieRepo movieRepo, ObjectMapper objectMapper){
+    public ImdbMovieServiceImpl(MovieRepo movieRepo, ObjectMapper objectMapper) {
         this.movieRepo = movieRepo;
         this.objectMapper = objectMapper;
         restTemplate = new RestTemplate();
@@ -68,11 +64,11 @@ public class ImdbMovieServiceImpl implements ImdbMovieServiceInteface{
         JsonNode postersRoot = objectMapper.readTree(getPostersResponse.getBody());
         JsonNode posters = postersRoot.get("posters");
         List<String> urls = new ArrayList<>();
-            int i = 0;
-            while (i <= 5) {
-                urls.add(posters.get(i).get("link").asText());
-                i++;
-            }
+        int i = 0;
+        while (i <= 5) {
+            urls.add(posters.get(i).get("link").asText());
+            i++;
+        }
         return urls;
     }
 

@@ -14,25 +14,25 @@ public class DTOConverter {
     ModelMapper modelMapper;
 
     @Autowired
-    public DTOConverter(ModelMapper modelMapper){
+    public DTOConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
-    public MovieDTO convertToMovieDTO(Movie movie){
+    public MovieDTO convertToMovieDTO(Movie movie) {
         MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
-        movieDTO.setDurationInMinutes((int)movie.getDuration().toMinutes());
+        movieDTO.setDurationInMinutes((int) movie.getDuration().toMinutes());
         movieDTO.setCategory(convertToCategoryDTO(movie.getCategory()));
         movieDTO.setGenre(convertToGenreDTO(movie.getGenre()));
         return movieDTO;
     }
 
-    public Movie convertToMovie(MovieDTO movieDTO){
+    public Movie convertToMovie(MovieDTO movieDTO) {
         Movie movie = modelMapper.map(movieDTO, Movie.class);
         movie.setDuration(Duration.ofMinutes(movieDTO.getDurationInMinutes()));
         return movie;
     }
 
-    public TheaterDTO convertToTheaterDTO(Theater theater){
+    public TheaterDTO convertToTheaterDTO(Theater theater) {
         TheaterDTO theaterDTO = modelMapper.map(theater, TheaterDTO.class);
         theaterDTO.setCinemaHallDTOList(
                 theater.getCinemaHalls().stream()
@@ -42,17 +42,17 @@ public class DTOConverter {
         return theaterDTO;
     }
 
-    public Theater convertToTheater(TheaterDTO theaterDTO){
+    public Theater convertToTheater(TheaterDTO theaterDTO) {
         return modelMapper.map(theaterDTO, Theater.class);
     }
 
-    public TicketDTO convertToTicketDTO(Ticket ticket){
+    public TicketDTO convertToTicketDTO(Ticket ticket) {
         TicketDTO ticketDTO = modelMapper.map(ticket, TicketDTO.class);
         ticketDTO.setProjection(convertToProjectionDTO(ticket.getProjection()));
         return ticketDTO;
     }
 
-    public Ticket convertToTicket(TicketDTO ticketDTO){
+    public Ticket convertToTicket(TicketDTO ticketDTO) {
         return modelMapper.map(ticketDTO, Ticket.class);
     }
 
@@ -60,7 +60,7 @@ public class DTOConverter {
         CinemaHallDTO cinemaHallDTO = modelMapper.map(cinemaHall, CinemaHallDTO.class);
         cinemaHallDTO.setProjectionDTOS(
                 cinemaHall.getProjections().stream()
-                .map(projection -> convertToProjectionDTO(projection)).collect(Collectors.toList())
+                        .map(projection -> convertToProjectionDTO(projection)).collect(Collectors.toList())
         );
         return cinemaHallDTO;
     }
@@ -69,36 +69,42 @@ public class DTOConverter {
         return modelMapper.map(cinemaHallDTO, CinemaHall.class);
     }
 
-    public ProjectionDTO convertToProjectionDTO(Projection projection){
-        ProjectionDTO projectionDTO = modelMapper.map(projection,ProjectionDTO.class);
+    public ProjectionDTO convertToProjectionDTO(Projection projection) {
+        ProjectionDTO projectionDTO = modelMapper.map(projection, ProjectionDTO.class);
         projectionDTO.setMovie(convertToMovieDTO(projection.getMovie()));
         projectionDTO.setCinemaHallName(projection.getHall().getName());
         return projectionDTO;
     }
 
-    public Projection convertToProjection(ProjectionDTO projectionDTO){return modelMapper.map(projectionDTO,Projection.class);}
+    public Projection convertToProjection(ProjectionDTO projectionDTO) {
+        return modelMapper.map(projectionDTO, Projection.class);
+    }
 
-    public List<ProjectionDTO> convertToListProjectionDTO(List<Projection> projections){
+    public List<ProjectionDTO> convertToListProjectionDTO(List<Projection> projections) {
         return projections.stream()
                 .map(this::convertToProjectionDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<TicketDTO> convertToListTicketDTO(List<Ticket> tickets){
+    public List<TicketDTO> convertToListTicketDTO(List<Ticket> tickets) {
         return tickets.stream()
                 .map(this::convertToTicketDTO)
                 .collect(Collectors.toList());
     }
 
-    public CategoryDTO convertToCategoryDTO(Category category){
-        return modelMapper.map(category,CategoryDTO.class);
+    public CategoryDTO convertToCategoryDTO(Category category) {
+        return modelMapper.map(category, CategoryDTO.class);
     }
 
-    public Category covertToCategory(CategoryDTO categoryDTO){return modelMapper.map(categoryDTO, Category.class);}
+    public Category covertToCategory(CategoryDTO categoryDTO) {
+        return modelMapper.map(categoryDTO, Category.class);
+    }
 
-    public GenreDTO convertToGenreDTO(Genre genre){
+    public GenreDTO convertToGenreDTO(Genre genre) {
         return modelMapper.map(genre, GenreDTO.class);
     }
 
-    public Genre convertToGenre(GenreDTO genreDTO){return modelMapper.map(genreDTO, Genre.class);}
+    public Genre convertToGenre(GenreDTO genreDTO) {
+        return modelMapper.map(genreDTO, Genre.class);
+    }
 }

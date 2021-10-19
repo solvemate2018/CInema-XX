@@ -19,7 +19,7 @@ public class CategoryControllerImpl implements CategoryControllerInterface {
     DTOConverter dtoConverter;
 
     @Autowired
-    public CategoryControllerImpl(CategoryServiceImpl categoryService, DTOConverter dtoConverter){
+    public CategoryControllerImpl(CategoryServiceImpl categoryService, DTOConverter dtoConverter) {
         this.categoryService = categoryService;
         this.dtoConverter = dtoConverter;
     }

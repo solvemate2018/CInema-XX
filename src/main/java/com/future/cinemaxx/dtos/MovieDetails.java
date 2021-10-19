@@ -6,11 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,20 +26,20 @@ public class MovieDetails {
     private List<ActorsInfo> actorList = new ArrayList<>();
 
 
-    public MovieDetails(JsonNode root){
+    public MovieDetails(JsonNode root) {
         this.title = root.path("title").asText();
         this.fullTitle = root.path("fullTitle").asText();
         this.releaseDate = root.path("imDbRating").toString();
         this.imDbRating = root.path("releaseDate").asText();
         this.runtimeStr = root.path("runtimeStr").asText();
         JsonNode actorList = root.get("actorList");
-            int i = 0;
-            while(i <= 5){
-                ActorsInfo info = new ActorsInfo();
-                info.setName(actorList.get(i).get("name").asText());
-                info.setAsCharacter(actorList.get(i).get("asCharacter").asText());
-                this.actorList.add(info);
-                i++;
-            }
+        int i = 0;
+        while (i <= 5) {
+            ActorsInfo info = new ActorsInfo();
+            info.setName(actorList.get(i).get("name").asText());
+            info.setAsCharacter(actorList.get(i).get("asCharacter").asText());
+            this.actorList.add(info);
+            i++;
+        }
     }
 }
