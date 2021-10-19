@@ -122,7 +122,8 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
 
     @Override
     public void deleteProjection(int projectionId) {
-        if (!projectionRepo.existsById(projectionId)) throw new ResourceNotFoundException();
+        if (!projectionRepo.existsById(projectionId)) {throw new ResourceNotFoundException();}
+        ticketRepo.deleteByProjection_Id(projectionId);
         projectionRepo.deleteById(projectionId);
     }
 

@@ -43,4 +43,28 @@ public class TicketServiceImpl implements TicketServiceInterface{
         throw new ResourceNotFoundException();
     }
     }
+    @Override
+    public Ticket bookTicket(int projectionId, int row, int column) {
+        Ticket ticketToBook = ticketRepo.getTicketByProjection_IdAndTicketRowAndTicketColumn(projectionId,row,column);
+        if(ticketToBook==null){throw new ResourceNotFoundException("There is no ticket for projection with id" + projectionId+
+                "located at row: "+row+" and column: "+column);}
+        if(ticketToBook.isSold()){throw new IllegalStateException("The selected ticket is already booked");}
+        ticketToBook.setSold(true);
+        return ticketRepo.save(ticketToBook);
+    }
+
+    @Override
+    public Ticket getTicketByProjectionRowColumn(int projectionId, int row, int column) {
+        Ticket ticket = ticketRepo.getTicketByProjection_IdAndTicketRowAndTicketColumn(projectionId,row,column);
+        if(ticket==null){throw new ResourceNotFoundException("There is no ticket for projection with id" + projectionId+
+                "located at row: "+row+" and column: "+column);}
+        return ticket;
+    }
+
+    @Override
+    public List<Ticket> getTicketByProjection(int projectionId) {
+        List<Ticket> tickets = ticketRepo.getTicketsByProjection_id(projectionId);
+        if(tickets.isEmpty()){throw new ResourceNotFoundException("There are no tickets for projection with id: "+projectionId);}
+        return tickets;
+    }
 }

@@ -10,4 +10,7 @@ public interface TicketServiceInterface {
     Ticket getTicketById(long id);
     Ticket createTicket(Ticket ticket, int projectionId);
     void deleteTicket(long id);
+    Ticket bookTicket(int projectionId, int row, int column);
+    Ticket getTicketByProjectionRowColumn(int projectionId, int row, int column);
+    List<Ticket> getTicketByProjection(int projectionId);
 }
