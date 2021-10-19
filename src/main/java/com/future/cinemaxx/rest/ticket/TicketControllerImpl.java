@@ -47,6 +47,6 @@ public class TicketControllerImpl implements TicketControllerInterface{
 
     @Override
     public List<TicketDTO> getTicketsByProjectionId(int projectionId) {
-        return ticketService.getTicketByProjection(projectionId).stream().map(ticket -> dtoConverter.convertToTicketDTO(ticket)).collect(Collectors.toList());
+        return dtoConverter.convertToListTicketDTO(ticketService.getTicketByProjection(projectionId));
     }
 }
