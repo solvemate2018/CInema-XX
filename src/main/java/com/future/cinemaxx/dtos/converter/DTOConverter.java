@@ -21,8 +21,8 @@ public class DTOConverter {
     public MovieDTO convertToMovieDTO(Movie movie){
         MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
         movieDTO.setDurationInMinutes((int)movie.getDuration().toMinutes());
-        movieDTO.setCategory(modelMapper.map(movie.getCategory(), CategoryDTO.class));
-        movieDTO.setGenre(modelMapper.map(movie.getGenre(), GenreDTO.class));
+        movieDTO.setCategory(convertToCategoryDTO(movie.getCategory()));
+        movieDTO.setGenre(convertToGenreDTO(movie.getGenre()));
         return movieDTO;
     }
 
@@ -48,7 +48,7 @@ public class DTOConverter {
 
     public TicketDTO convertToTicketDTO(Ticket ticket){
         TicketDTO ticketDTO = modelMapper.map(ticket, TicketDTO.class);
-        ticketDTO.setProjection(modelMapper.map(ticket.getProjection(),ProjectionDTO.class));
+        ticketDTO.setProjection(convertToProjectionDTO(ticket.getProjection()));
         return ticketDTO;
     }
 
@@ -71,7 +71,7 @@ public class DTOConverter {
 
     public ProjectionDTO convertToProjectionDTO(Projection projection){
         ProjectionDTO projectionDTO = modelMapper.map(projection,ProjectionDTO.class);
-        projectionDTO.setMovie(modelMapper.map(projection.getMovie(), MovieDTO.class));
+        projectionDTO.setMovie(convertToMovieDTO(projection.getMovie()));
         projectionDTO.setCinemaHallName(projection.getHall().getName());
         return projectionDTO;
     }
