@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 
 public interface TicketControllerInterface {
+
     @PutMapping("/book/{projectionId}/row/{row}/column/{column}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     TicketDTO bookTicket(@PathVariable("projectionId") int projectionId,@PathVariable("row") int row, @PathVariable("column") int column);
@@ -22,4 +23,11 @@ public interface TicketControllerInterface {
 
     @GetMapping("/projection/{projectionId}")
     List<TicketDTO> getTicketsByProjectionId(@PathVariable("projectionId") int projectionId);
+    @GetMapping("/hall/{hallId}/getByDate")
+    List<TicketDTO> getByDateAndHallId(@PathVariable int hallId, @RequestParam("date") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDateTime date);
+
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void delete(@PathVariable int id);
 }

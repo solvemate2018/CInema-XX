@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,14 @@ public class TicketControllerImpl implements TicketControllerInterface{
     }
 
     @Override
+    public List<TicketDTO> getByDateAndHallId(int hallId, LocalDateTime date) {
+        return dtoConverter.convertToListTicketDTO(ticketService.getByDateAndHallId(hallId, date));
+
+    }
+
+    @Override
+    public void delete(int id) {}
+
     public TicketDTO getTicketByProjectionRowAndColumn(int projectionId, int row, int column) {
         return dtoConverter.convertToTicketDTO(ticketService.getTicketByProjectionRowColumn(projectionId,row,column));
     }

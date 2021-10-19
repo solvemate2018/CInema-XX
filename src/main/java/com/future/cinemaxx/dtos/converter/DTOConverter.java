@@ -84,6 +84,12 @@ public class DTOConverter {
                 .collect(Collectors.toList());
     }
 
+    public List<TicketDTO> convertToListTicketDTO(List<Ticket> tickets){
+        return tickets.stream()
+                .map(this::convertToTicketDTO)
+                .collect(Collectors.toList());
+    }
+
     public CategoryDTO convertToCategoryDTO(Category category){
         return modelMapper.map(category,CategoryDTO.class);
     }
