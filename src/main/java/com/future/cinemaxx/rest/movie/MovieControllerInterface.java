@@ -25,7 +25,7 @@ public interface MovieControllerInterface {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    MovieDTO update( @PathVariable("id") int id, @RequestBody MovieDTO movieDTO);
+    MovieDTO update(@PathVariable("id") int id, @RequestBody MovieDTO movieDTO);
 
     @GetMapping("/details/{movieId}")
     MovieDetails getDetails(@PathVariable int movieId) throws JsonProcessingException;

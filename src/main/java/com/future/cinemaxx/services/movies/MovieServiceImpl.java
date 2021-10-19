@@ -1,8 +1,6 @@
 package com.future.cinemaxx.services.movies;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.future.cinemaxx.dtos.MovieDetails;
 import com.future.cinemaxx.entities.Category;
 import com.future.cinemaxx.entities.Genre;
@@ -14,26 +12,23 @@ import com.future.cinemaxx.repositories.ProjectionRepo;
 import com.future.cinemaxx.services.imdb.ImdbMovieServiceInteface;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Service
 public class MovieServiceImpl implements MovieServiceInterface {
-    @Value("${app.ImdbApiKey}")
-    private String apiKey;
-
     MovieRepo movieRepo;
     ProjectionRepo projectionRepo;
     GenreRepo genreRepo;
     CategoryRepo categoryRepo;
     ImdbMovieServiceInteface imdbMovieService;
+    @Value("${app.ImdbApiKey}")
+    private String apiKey;
 
     public MovieServiceImpl(MovieRepo movieRepo, GenreRepo genreRepo,
-                            CategoryRepo categoryRepo, ProjectionRepo projectionRepo, ImdbMovieServiceInteface imdbMovieService){
+                            CategoryRepo categoryRepo, ProjectionRepo projectionRepo, ImdbMovieServiceInteface imdbMovieService) {
         this.movieRepo = movieRepo;
         this.genreRepo = genreRepo;
         this.categoryRepo = categoryRepo;
@@ -52,6 +47,7 @@ public class MovieServiceImpl implements MovieServiceInterface {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Movie createMovie(Movie movie, int genreId, int categoryId) {
         return movieRepo.save(new Movie(movie.getName(),
                 movie.getDuration(),
@@ -60,34 +56,40 @@ public class MovieServiceImpl implements MovieServiceInterface {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteMovie(int movieId) {
-        if(projectionRepo.existsByMovie(
-                movieRepo.findById(movieId).orElseThrow(()-> new ResourceNotFoundException())))
+        if (projectionRepo.existsByMovie(
+                movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException())))
             throw new IllegalStateException("There are projections using this movie");
         movieRepo.deleteById(movieId);
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Movie updateMovie(int id, Movie movie) {
         Movie updatedMovie = movieRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie with this id does not exist"));
 
-        if (movie.getName()!=null){ updatedMovie.setName(movie.getName()); }
-        if (movie.getDuration()!=null){ updatedMovie.setDuration(movie.getDuration()); }
+        if (movie.getName() != null) {
+            updatedMovie.setName(movie.getName());
+        }
+        if (movie.getDuration() != null) {
+            updatedMovie.setDuration(movie.getDuration());
+        }
 
-        if (movie.getGenre()!=null){
+        if (movie.getGenre() != null) {
             Genre genre = genreRepo.findGenreByName(movie.getGenre().getName());
-            if(genre==null){
+            if (genre == null) {
                 throw new ResourceNotFoundException("Genre with this name does not exist");
-            }else{
+            } else {
                 updatedMovie.setGenre(genre);
             }
         }
-        if (movie.getCategory()!=null){
+        if (movie.getCategory() != null) {
             Category category = categoryRepo.findCategoryByName(movie.getCategory().getName());
-            if(category==null){
+            if (category == null) {
                 throw new ResourceNotFoundException("The category with this name does not exist");
-            }else{
+            } else {
                 updatedMovie.setCategory(category);
             }
         }

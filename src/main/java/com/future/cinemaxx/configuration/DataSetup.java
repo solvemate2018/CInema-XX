@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Configuration
@@ -34,7 +33,7 @@ public class DataSetup implements CommandLineRunner {
                      ProjectionRepo projectionRepo,
                      TheaterRepo theaterRepo,
                      TicketRepo ticketRepo,
-                     RoleRepository roleRepository){
+                     RoleRepository roleRepository) {
         this.categoryRepo = categoryRepo;
         this.cinemaHallRepo = cinemaHallRepo;
         this.genreRepo = genreRepo;
@@ -61,7 +60,7 @@ public class DataSetup implements CommandLineRunner {
         roleRepository.save(managerRole);
 
         Theater theater = theaterRepo.save(new Theater("Cinema city", "Copenhagen", "Husumtorv", 25));
-        Theater theater1 = theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test",11));
+        Theater theater1 = theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test", 11));
 
         CinemaHall cinemaHall1 = cinemaHallRepo.save(new CinemaHall("A", 6, 8, theater));
         CinemaHall cinemaHall2 = cinemaHallRepo.save(new CinemaHall("B", 6, 8, theater));
@@ -80,13 +79,13 @@ public class DataSetup implements CommandLineRunner {
         Genre genre3 = genreRepo.save(new Genre("Drama"));
         Genre genre4 = genreRepo.save(new Genre("Fantasy"));
 
-        Movie movie1 = movieRepo.save(new Movie("Scary movie",Duration.ofMinutes(125) , genre2, category4));
+        Movie movie1 = movieRepo.save(new Movie("Scary movie", Duration.ofMinutes(125), genre2, category4));
         Movie movie2 = movieRepo.save(new Movie("Spider-man", Duration.ofMinutes(140), genre4, category1));
-        Movie movie3 = movieRepo.save(new Movie("Gladiator",Duration.ofMinutes(115) , genre1, category3));
-        Movie movie4 = movieRepo.save(new Movie("Last movie",Duration.ofMinutes(163) , genre3, category2));
-        Movie movie5 = movieRepo.save(new Movie("Inception",Duration.ofMinutes(200) , genre3, category3));
-        Movie movie6 = movieRepo.save(new Movie("Dark Knight",Duration.ofMinutes(220) , genre3, category3));
-        Movie movie7 = movieRepo.save(new Movie("Deadpool",Duration.ofMinutes(163) , genre2, category4));
+        Movie movie3 = movieRepo.save(new Movie("Gladiator", Duration.ofMinutes(115), genre1, category3));
+        Movie movie4 = movieRepo.save(new Movie("Last movie", Duration.ofMinutes(163), genre3, category2));
+        Movie movie5 = movieRepo.save(new Movie("Inception", Duration.ofMinutes(200), genre3, category3));
+        Movie movie6 = movieRepo.save(new Movie("Dark Knight", Duration.ofMinutes(220), genre3, category3));
+        Movie movie7 = movieRepo.save(new Movie("Deadpool", Duration.ofMinutes(163), genre2, category4));
 
         Projection projection1 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall1, movie1));
         Projection projection2 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(7), 15.6f, cinemaHall1, movie2));

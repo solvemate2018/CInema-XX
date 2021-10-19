@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/movie")
-public class MovieControllerImpl implements MovieControllerInterface{
+public class MovieControllerImpl implements MovieControllerInterface {
     @Autowired
     MovieServiceImpl movieService;
     @Autowired
     DTOConverter dtoConverter;
 
-    public MovieControllerImpl(MovieServiceImpl movieService, DTOConverter dtoConverter){
+    public MovieControllerImpl(MovieServiceImpl movieService, DTOConverter dtoConverter) {
         this.movieService = movieService;
         this.dtoConverter = dtoConverter;
     }
@@ -42,12 +42,12 @@ public class MovieControllerImpl implements MovieControllerInterface{
 
     @Override
     public void deleteMovieById(int id) {
-    movieService.deleteMovie(id);
+        movieService.deleteMovie(id);
     }
 
     @Override
     public MovieDTO update(int id, MovieDTO movieDTO) {
-        return dtoConverter.convertToMovieDTO(movieService.updateMovie(id,dtoConverter.convertToMovie(movieDTO)));
+        return dtoConverter.convertToMovieDTO(movieService.updateMovie(id, dtoConverter.convertToMovie(movieDTO)));
     }
 
     @Override

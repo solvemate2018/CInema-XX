@@ -1,7 +1,6 @@
 package com.future.cinemaxx.rest.category;
 
 import com.future.cinemaxx.dtos.CategoryDTO;
-import com.future.cinemaxx.dtos.MovieDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +24,6 @@ public interface CategoryControllerInterface {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    CategoryDTO update( @PathVariable("id") int id, @RequestBody CategoryDTO categoryDTO);
+    CategoryDTO update(@PathVariable("id") int id, @RequestBody CategoryDTO categoryDTO);
 
 }
