@@ -6,6 +6,7 @@ import com.future.cinemaxx.entities.Genre;
 import com.future.cinemaxx.repositories.CategoryRepo;
 import com.future.cinemaxx.repositories.GenreRepo;
 import com.future.cinemaxx.testUtils.TestDataMaker;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,11 @@ class GenreControllerImplTest {
     @BeforeEach
     void setUpCategories(){
         ids = TestDataMaker.setUpGenres(genreRepo);
+    }
+
+    @AfterEach
+    void clear(){
+        TestDataMaker.clearGenre(genreRepo);
     }
 
     @Test

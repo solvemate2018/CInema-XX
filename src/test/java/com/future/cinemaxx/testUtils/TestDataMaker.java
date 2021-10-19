@@ -172,4 +172,56 @@ public class TestDataMaker {
         }
         return projectionIds;
     }
+    public static ArrayList<Integer>[] setUpTheatersAndHalls(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo){
+        cinemaHallRepo.deleteAll();
+        theaterRepo.deleteAll();
+        ArrayList<Integer>[] ids = new ArrayList[2];
+        ArrayList<Integer> theaterIds = new ArrayList<>();
+
+        Theater theater0 = theaterRepo.save(new Theater("Cinema city", "Copenhagen", "Husumtorv", 25));
+        Theater theater1 = theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test", 11));
+
+        theaterIds.add(theater0.getId());
+        theaterIds.add(theater1.getId());
+
+        ArrayList<Integer> hallIds = new ArrayList<Integer>();
+
+        CinemaHall cinemaHall1 = cinemaHallRepo.save(new CinemaHall("A", 12, 16, theater0));
+        CinemaHall cinemaHall2 = cinemaHallRepo.save(new CinemaHall("B", 8, 12, theater0));
+        CinemaHall cinemaHall3 = cinemaHallRepo.save(new CinemaHall("C", 10, 14, theater0));
+        CinemaHall cinemaHall4 = cinemaHallRepo.save(new CinemaHall("A", 7, 21, theater1));
+        CinemaHall cinemaHall5 = cinemaHallRepo.save(new CinemaHall("B", 15, 4, theater1));
+        CinemaHall cinemaHall6 = cinemaHallRepo.save(new CinemaHall("C", 9, 14, theater1));
+
+        hallIds.add(cinemaHall1.getId());
+        hallIds.add(cinemaHall2.getId());
+        hallIds.add(cinemaHall3.getId());
+        hallIds.add(cinemaHall4.getId());
+        hallIds.add(cinemaHall5.getId());
+        hallIds.add(cinemaHall6.getId());
+
+        ids[0] = theaterIds;
+        ids[1] = hallIds;
+        return ids;
+    }
+    public static  ArrayList<Integer> setUpTheaters(TheaterRepo theaterRepo){
+        theaterRepo.deleteAll();
+        ArrayList<Integer> theaterIds = new ArrayList<>();
+        theaterIds.add(theaterRepo.save(new Theater("Cinema city", "Copenhagen", "Husumtorv", 25)).getId());
+        theaterIds.add(theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test", 11)).getId());
+        return theaterIds;
+    }
+    public static void clearTheaters(TheaterRepo theaterRepo){
+        theaterRepo.deleteAll();
+    }
+    public static void clearTheaterAndHall(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo){
+        cinemaHallRepo.deleteAll();
+        theaterRepo.deleteAll();
+    }
+    public static void clearGenre(GenreRepo genreRepo){
+        genreRepo.deleteAll();
+    }
+    public static void clearCategory(CategoryRepo categoryRepo){
+        categoryRepo.deleteAll();
+    }
 }

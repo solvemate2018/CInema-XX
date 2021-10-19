@@ -28,6 +28,12 @@ public class TicketControllerImpl implements TicketControllerInterface{
     public TicketDTO bookTicket(int projectionId, int row, int column) {
         return dtoConverter.convertToTicketDTO(ticketService.bookTicket(projectionId,row,column));
     }
+
+    @Override
+    public TicketDTO cancelBooking(int projectionId, int row, int column) {
+        return dtoConverter.convertToTicketDTO(ticketService.cancelBooking(projectionId,row,column));
+    }
+
     public List<TicketDTO> getAll(){
         return ticketService.getAllTickets().stream().map(ticket -> dtoConverter.convertToTicketDTO(ticket)).collect(Collectors.toList());
     }

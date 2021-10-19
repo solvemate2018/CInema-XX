@@ -2,8 +2,10 @@ package com.future.cinemaxx.rest.category;
 
 import com.future.cinemaxx.dtos.CategoryDTO;
 import com.future.cinemaxx.dtos.ProjectionDTO;
+import com.future.cinemaxx.entities.Category;
 import com.future.cinemaxx.repositories.*;
 import com.future.cinemaxx.testUtils.TestDataMaker;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,12 +62,18 @@ class CategoryControllerImplTest {
     void setUpCategories(){
         ids = TestDataMaker.setUpCategories(categoryRepo);
     }
+    @AfterEach
+    void clear(){
+        TestDataMaker.clearCategory(categoryRepo);
+    }
 
     @Test
     void getAll() {
         ResponseEntity<List<CategoryDTO>> response = getResponseFromAllCategories();
+        List<Category> categories = categoryRepo.findAll();
         assertEquals(4,response.getBody().size());
         assertEquals(response.getBody().get(0).getName(), "A");
+        assertEquals(categories.size(),response.getBody().size());
     }
 
     @Test

@@ -14,6 +14,7 @@ public interface TicketServiceInterface {
     List <Ticket> getByDateAndHallId (int hallId, LocalDateTime date);
     void deleteTicket(long id);
     Ticket bookTicket(int projectionId, int row, int column);
+    Ticket cancelBooking(int projectionId, int row, int column);
     Ticket getTicketByProjectionRowColumn(int projectionId, int row, int column);
     List<Ticket> getTicketByProjection(int projectionId);
 }

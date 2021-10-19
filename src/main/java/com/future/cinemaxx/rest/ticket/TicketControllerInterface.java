@@ -14,6 +14,10 @@ public interface TicketControllerInterface {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     TicketDTO bookTicket(@PathVariable("projectionId") int projectionId,@PathVariable("row") int row, @PathVariable("column") int column);
 
+    @PutMapping("/cancelBooking/{projectionId}/row/{row}/column/{column}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    TicketDTO cancelBooking(@PathVariable("projectionId") int projectionId,@PathVariable("row") int row, @PathVariable("column") int column);
+
     @GetMapping
     List<TicketDTO> getAll();
 
@@ -22,6 +26,7 @@ public interface TicketControllerInterface {
 
     @GetMapping("/projection/{projectionId}")
     List<TicketDTO> getTicketsByProjectionId(@PathVariable("projectionId") int projectionId);
+
     @GetMapping("/hall/{hallId}/getByDate")
     List<TicketDTO> getByDateAndHallId(@PathVariable int hallId, @RequestParam("date") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDateTime date);
 
