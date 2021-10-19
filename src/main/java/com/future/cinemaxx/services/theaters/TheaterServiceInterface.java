@@ -10,5 +10,7 @@ public interface TheaterServiceInterface {
     Theater getTheaterById(int id);
     Theater createTheater(Theater theater);
     void deleteTheater(int id);
+    Theater updateTheater(int theaterId, Theater theater);
+    Theater addCinemaHall(int projectionId, int hallId);
 
 }

@@ -12,8 +12,8 @@ import org.springframework.test.context.TestPropertySource;
 @WithMockUser
 class CinemaxxApplicationTests {
 
-//    @Test
-//    void contextLoads() {
-//    }
+    @Test
+    void contextLoads() {
+    }
 
 }
