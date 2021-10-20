@@ -1,20 +1,33 @@
 package com.future.cinemaxx.security.entities;
 
 import com.future.cinemaxx.entities.Ticket;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@EqualsAndHashCode
 public class User {
     @OneToMany(mappedBy = "user")
     List<Ticket> ticketList = new ArrayList<>();
 
-    private long id;
+    @Basic
+    @Column(nullable = false, length = 50)
     private String email;
+
+    @Basic
+    @Column(nullable = false, length = 72)  //72 == Max length of a bcrypt encoded password
     private String password;
+
+    @Id
     private String username;
-    private Set<Role> roles = new HashSet<>(); //this was added manually
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_username"),
+            inverseJoinColumns = @JoinColumn(name = "role_name"))
+    private Set<Role> roles = new HashSet<>();
 
     public User(String username, String email, String password) {
         this.username = username;
@@ -24,19 +37,6 @@ public class User {
 
     public User(){}
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @Basic
-    @Column(name = "email", nullable = false, length = 50)
     public String getEmail() {
         return email;
     }
@@ -45,8 +45,6 @@ public class User {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "password", nullable = false, length = 120)
     public String getPassword() {
         return password;
     }
@@ -55,8 +53,6 @@ public class User {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "username", nullable = false, length = 20)
     public String getUsername() {
         return username;
     }
@@ -65,11 +61,6 @@ public class User {
         this.username = username;
     }
 
-    //this was added manually
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(	name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
     public Set<Role> getRoles() {
         return roles;
     }
@@ -78,16 +69,7 @@ public class User {
         this.roles = roles;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(username, user.username);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password, username);
+    public boolean addRole(Role role) {
+        return roles.add(role);
     }
 }

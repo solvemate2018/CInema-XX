@@ -1,5 +1,6 @@
 package com.future.cinemaxx.security.controllers;
 
+import com.future.cinemaxx.exceptionHandling.Client4xxException;
 import com.future.cinemaxx.security.entities.ERole;
 import com.future.cinemaxx.security.entities.Role;
 import com.future.cinemaxx.security.entities.User;
@@ -65,7 +66,7 @@ public class AuthController {
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok(new JwtResponse(jwt,
-												 userDetails.getId(), 
+//												 userDetails.getId(),
 												 userDetails.getUsername(), 
 												 userDetails.getEmail(), 
 												 roles));
@@ -74,15 +75,11 @@ public class AuthController {
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
+			throw new Client4xxException("Username is already taken");
 		}
 
 		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Email is already in use!"));
+			throw new Client4xxException(" Email is already in use");
 		}
 
 		// Create new user's account
@@ -110,18 +107,9 @@ public class AuthController {
 					Role employeeRole = roleRepository.findByName(ERole.ROLE_MANAGER)
 							.orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE));
 					roles.add(employeeRole);
-
-					break;
-				case "customer":
-					Role customerRole = roleRepository.findByName(ERole.ROLE_CUSTOMER)
-							.orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE));
-					roles.add(customerRole);
-
 					break;
 				default:
-					customerRole = roleRepository.findByName(ERole.ROLE_MOVIE)
-							.orElseThrow(() -> new RuntimeException(ROLE_NOT_FOUND_MESSAGE));
-					roles.add(customerRole);
+					throw new Client4xxException(ROLE_NOT_FOUND_MESSAGE);
 				}
 			});
 		}
