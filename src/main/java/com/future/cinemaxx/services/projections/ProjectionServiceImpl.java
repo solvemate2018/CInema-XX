@@ -124,6 +124,7 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public Projection updateProjectionById(int id, int movieId, int hallId, Projection projection) {
         Projection updatedProjection = projectionRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no cinema hall with id " + id));

@@ -3,6 +3,13 @@ package com.future.cinemaxx.rest.ticket;
 
 import com.future.cinemaxx.dtos.TicketDTO;
 import com.future.cinemaxx.repositories.*;
+import com.future.cinemaxx.security.entities.ERole;
+import com.future.cinemaxx.security.entities.Role;
+import com.future.cinemaxx.security.entities.User;
+import com.future.cinemaxx.security.payload.request.LoginRequest;
+import com.future.cinemaxx.security.payload.response.JwtResponse;
+import com.future.cinemaxx.security.repositories.RoleRepository;
+import com.future.cinemaxx.security.repositories.UserRepository;
 import com.future.cinemaxx.testUtils.TestDataMaker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +25,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -35,10 +43,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class TicketControllerImplTest {
     private final String BASE_PATH = "/api/ticket";
     private final HttpHeaders headers = new HttpHeaders();
+    private String securityToken;
+    private HttpHeaders headersForRequest;
     @LocalServerPort
     private int port;
     @Autowired
     TestRestTemplate restTemplate;
+
+    //For creating a user
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    PasswordEncoder encoder;
+
     //Used to set up mock data for testing
 
     CategoryRepo categoryRepo;
@@ -69,17 +88,28 @@ class TicketControllerImplTest {
     }
     @AfterEach
     void clear(){
-        TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
+        TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo,userRepository,roleRepository);
     }
 
     @BeforeEach
     void createData(){
         ids= TestDataMaker.setUpTickets(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
+        Role adminRole = new Role(ERole.ROLE_ADMIN);
+        Role customerRole = new Role(ERole.ROLE_CUSTOMER);
+        roleRepository.save(adminRole);
+        roleRepository.save(customerRole);
+        User admin = new User("admin", "admin@a.dk", encoder.encode("test"));
+        admin.addRole(adminRole);
+        admin.addRole(customerRole);
+        userRepository.save(admin);
+        securityToken = "Bearer "+ login("admin","test").getBody().getAccessToken();
+        headersForRequest = new HttpHeaders();
+        headersForRequest.add("Authorization",securityToken);
     }
 
     @Test
     void bookTicket() {
-        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
         ResponseEntity<TicketDTO> res = restTemplate.exchange(makeUrl(BASE_PATH+"/book/"+ids.get(2)
                         +"/row/6/column/7"),
                 HttpMethod.PUT ,
@@ -103,7 +133,7 @@ class TicketControllerImplTest {
 
     @Test
     void getTicketByProjectionRowAndColumn() {
-        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
         ResponseEntity<TicketDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+"/projection/"+ids.get(2)
                         +"/row/6/column/7"),
                 HttpMethod.GET,
@@ -116,7 +146,7 @@ class TicketControllerImplTest {
 
     @Test
     void getTicketsByProjectionId() {
-        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
         ResponseEntity<List<TicketDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH+"/projection/"+ids.get(1)),
                 HttpMethod.GET,
                 entity,
@@ -130,12 +160,25 @@ class TicketControllerImplTest {
         return pathBuilt;
     }
     private ResponseEntity<List<TicketDTO>> getResponseFromAllTickets() {
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        HttpEntity<String> entity = new HttpEntity<>(null, headersForRequest);
         ResponseEntity<List<TicketDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH),
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<List<TicketDTO>>() {
                 });
+        return response;
+    }
+    //Utility method to login and store the return the received response, which includes the securityToken
+    private   ResponseEntity<JwtResponse>  login(String userName, String password) {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername(userName);
+        loginRequest.setPassword(password);
+
+        HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest,headers);
+        ResponseEntity<JwtResponse> response = restTemplate.exchange(makeUrl("/api/auth/signin"),
+                HttpMethod.POST,
+                entity,
+                JwtResponse.class);
         return response;
     }
 }

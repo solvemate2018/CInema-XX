@@ -6,6 +6,13 @@ import com.future.cinemaxx.entities.Theater;
 import com.future.cinemaxx.repositories.CinemaHallRepo;
 import com.future.cinemaxx.repositories.GenreRepo;
 import com.future.cinemaxx.repositories.TheaterRepo;
+import com.future.cinemaxx.security.entities.ERole;
+import com.future.cinemaxx.security.entities.Role;
+import com.future.cinemaxx.security.entities.User;
+import com.future.cinemaxx.security.payload.request.LoginRequest;
+import com.future.cinemaxx.security.payload.response.JwtResponse;
+import com.future.cinemaxx.security.repositories.RoleRepository;
+import com.future.cinemaxx.security.repositories.UserRepository;
 import com.future.cinemaxx.testUtils.TestDataMaker;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +29,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -41,10 +49,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class TheaterControllerImplTest {
     private final String BASE_PATH = "/api/theater";
     private final HttpHeaders headers = new HttpHeaders();
+    private String securityToken;
+    private HttpHeaders headersForRequest;
     @LocalServerPort
     private int port;
     @Autowired
     TestRestTemplate restTemplate;
+
+    //For creating a user
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    PasswordEncoder encoder;
 
     //Used to set up mock data for testing
 
@@ -62,10 +80,18 @@ class TheaterControllerImplTest {
     @BeforeEach
     void setUpTheater(){
         ids = TestDataMaker.setUpTheaters(theaterRepo);
+        Role adminRole = new Role(ERole.ROLE_ADMIN);
+        roleRepository.save(adminRole);
+        User admin = new User("admin", "admin@a.dk", encoder.encode("test"));
+        admin.addRole(adminRole);
+        userRepository.save(admin);
+        securityToken = "Bearer "+ login("admin","test").getBody().getAccessToken();
+        headersForRequest = new HttpHeaders();
+        headersForRequest.add("Authorization",securityToken);
     }
     @AfterEach
     public void clear(){
-        TestDataMaker.clearTheaters(theaterRepo);
+        TestDataMaker.clearTheaters(theaterRepo,userRepository,roleRepository);
     }
 
     @Test
@@ -79,7 +105,7 @@ class TheaterControllerImplTest {
     void getTheaterById() {
         int id = ids.get(0);
         Theater theater = theaterRepo.findById(id).orElse(null);
-        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
         ResponseEntity<TheaterDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+"/"+id),
                 HttpMethod.GET,
                 entity,
@@ -94,7 +120,7 @@ class TheaterControllerImplTest {
     void delete() {
         List<Theater> theaters= theaterRepo.findAll();
         int sizeBefore = theaters.size();
-        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
         ResponseEntity<TheaterDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+"/"+ids.get(0)),
                 HttpMethod.DELETE,
                 entity,
@@ -110,12 +136,25 @@ class TheaterControllerImplTest {
     }
 
     private ResponseEntity<List<TheaterDTO>> getResponseFromAllTheaters() {
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        HttpEntity<String> entity = new HttpEntity<>(null, headersForRequest);
         ResponseEntity<List<TheaterDTO>> response = restTemplate.exchange(makeUrl(BASE_PATH),
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<List<TheaterDTO>>() {
                 });
+        return response;
+    }
+    //Utility method to login and store the return the received response, which includes the securityToken
+    private   ResponseEntity<JwtResponse>  login(String userName, String password) {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername(userName);
+        loginRequest.setPassword(password);
+
+        HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest,headers);
+        ResponseEntity<JwtResponse> response = restTemplate.exchange(makeUrl("/api/auth/signin"),
+                HttpMethod.POST,
+                entity,
+                JwtResponse.class);
         return response;
     }
 }

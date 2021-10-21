@@ -2,6 +2,13 @@ package com.future.cinemaxx.rest.projection;
 
 import com.future.cinemaxx.dtos.ProjectionDTO;
 import com.future.cinemaxx.repositories.*;
+import com.future.cinemaxx.security.entities.ERole;
+import com.future.cinemaxx.security.entities.Role;
+import com.future.cinemaxx.security.entities.User;
+import com.future.cinemaxx.security.payload.request.LoginRequest;
+import com.future.cinemaxx.security.payload.response.JwtResponse;
+import com.future.cinemaxx.security.repositories.RoleRepository;
+import com.future.cinemaxx.security.repositories.UserRepository;
 import com.future.cinemaxx.testUtils.TestDataMaker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +24,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -43,10 +51,21 @@ class ProjectionControllerImplTest {
 
     private final String BASE_PATH = "/api/projection";
     private final HttpHeaders headers = new HttpHeaders();
+    private String securityToken;
+    private HttpHeaders headersForRequest;
     @LocalServerPort
     private int port;
     @Autowired
     TestRestTemplate restTemplate;
+
+    //For creating a user
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    PasswordEncoder encoder;
+
 
     //Used to set up mock data for testing
 
@@ -79,12 +98,20 @@ class ProjectionControllerImplTest {
 
     @AfterEach
     public void clear(){
-        TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
+        TestDataMaker.clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo,userRepository,roleRepository);
     }
 
     @BeforeEach
     void createData(){
         ids= TestDataMaker.makeDataForTests(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
+        Role adminRole = new Role(ERole.ROLE_ADMIN);
+        roleRepository.save(adminRole);
+        User admin = new User("admin", "admin@a.dk", encoder.encode("test"));
+        admin.addRole(adminRole);
+        userRepository.save(admin);
+        securityToken = "Bearer "+ login("admin","test").getBody().getAccessToken();
+        headersForRequest = new HttpHeaders();
+        headersForRequest.add("Authorization",securityToken);
     }
 
     @Test
@@ -193,7 +220,7 @@ class ProjectionControllerImplTest {
 
     @Test
     void deleteProjectionById() {
-        HttpEntity<String> entity = new HttpEntity<>(null,headers);
+        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
         ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids[3].get(0)),
                 HttpMethod.DELETE,
                 entity,
@@ -212,7 +239,7 @@ class ProjectionControllerImplTest {
         Map<String, Integer> param = new HashMap<String, Integer>();
         param.put("id",id);
 
-        HttpEntity<ProjectionDTO> entity = new HttpEntity<ProjectionDTO>(projectionToEdit,headers);
+        HttpEntity<ProjectionDTO> entity = new HttpEntity<ProjectionDTO>(projectionToEdit,headersForRequest);
         ResponseEntity<ProjectionDTO> res = restTemplate.exchange(makeUrl(BASE_PATH+"/{id}/movie/"+ids[2].get(0)+"/hall/"+ids[1].get(0)),
                 HttpMethod.PUT ,
                 entity,
@@ -233,7 +260,7 @@ class ProjectionControllerImplTest {
         ProjectionDTO newProjection = new ProjectionDTO();
         newProjection.setStartTime(time);
         newProjection.setTicketPrice(16f);
-        HttpEntity<ProjectionDTO> entity = new HttpEntity<ProjectionDTO>(newProjection,headers);
+        HttpEntity<ProjectionDTO> entity = new HttpEntity<ProjectionDTO>(newProjection,headersForRequest);
         ResponseEntity<ProjectionDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+"/movie/"+ids[2].get(6)+"/hall/"+ids[1].get(0)),
                 HttpMethod.POST,
                 entity,
@@ -257,6 +284,19 @@ class ProjectionControllerImplTest {
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<List<ProjectionDTO>>() {});
+        return response;
+    }
+    //Utility method to login and store the return the received response, which includes the securityToken
+    private   ResponseEntity<JwtResponse>  login(String userName, String password) {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername(userName);
+        loginRequest.setPassword(password);
+
+        HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest,headers);
+        ResponseEntity<JwtResponse> response = restTemplate.exchange(makeUrl("/api/auth/signin"),
+                HttpMethod.POST,
+                entity,
+                JwtResponse.class);
         return response;
     }
 }

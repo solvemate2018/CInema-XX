@@ -2,6 +2,8 @@ package com.future.cinemaxx.testUtils;
 
 import com.future.cinemaxx.entities.*;
 import com.future.cinemaxx.repositories.*;
+import com.future.cinemaxx.security.repositories.RoleRepository;
+import com.future.cinemaxx.security.repositories.UserRepository;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -12,8 +14,10 @@ public class TestDataMaker {
 
     public static void clear(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo, CategoryRepo categoryRepo,
                              GenreRepo genreRepo, MovieRepo movieRepo, ProjectionRepo projectionRepo,
-                             TicketRepo ticketRepo) {
+                             TicketRepo ticketRepo, UserRepository userRepository, RoleRepository roleRepository) {
         ticketRepo.deleteAll();
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
         projectionRepo.deleteAll();
         movieRepo.deleteAll();
         categoryRepo.deleteAll();
@@ -139,7 +143,13 @@ public class TestDataMaker {
     public static ArrayList<Integer> setUpTickets(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo, CategoryRepo categoryRepo,
                                                   GenreRepo genreRepo, MovieRepo movieRepo, ProjectionRepo projectionRepo,
                                                   TicketRepo ticketRepo) {
-        clear(theaterRepo,cinemaHallRepo,categoryRepo,genreRepo,movieRepo,projectionRepo,ticketRepo);
+        ticketRepo.deleteAll();
+        projectionRepo.deleteAll();
+        movieRepo.deleteAll();
+        categoryRepo.deleteAll();
+        genreRepo.deleteAll();
+        cinemaHallRepo.deleteAll();
+        theaterRepo.deleteAll();
 
         ArrayList<Projection> projections = new ArrayList<Projection>();
         ArrayList<Integer> projectionIds = new ArrayList<Integer>();
@@ -209,17 +219,23 @@ public class TestDataMaker {
         theaterIds.add(theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test", 11)).getId());
         return theaterIds;
     }
-    public static void clearTheaters(TheaterRepo theaterRepo){
+    public static void clearTheaters(TheaterRepo theaterRepo,UserRepository userRepository, RoleRepository roleRepository){
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
         theaterRepo.deleteAll();
     }
     public static void clearTheaterAndHall(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo){
         cinemaHallRepo.deleteAll();
         theaterRepo.deleteAll();
     }
-    public static void clearGenre(GenreRepo genreRepo){
+    public static void clearGenre(GenreRepo genreRepo,UserRepository userRepository, RoleRepository roleRepository){
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
         genreRepo.deleteAll();
     }
-    public static void clearCategory(CategoryRepo categoryRepo){
+    public static void clearCategory(CategoryRepo categoryRepo, UserRepository userRepository, RoleRepository roleRepository){
+        userRepository.deleteAll();
+        roleRepository.deleteAll();
         categoryRepo.deleteAll();
     }
 }
