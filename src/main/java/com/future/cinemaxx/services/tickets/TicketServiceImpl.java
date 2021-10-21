@@ -31,16 +31,7 @@ public class TicketServiceImpl implements TicketServiceInterface {
 
     @Override
     public Ticket getTicketById(long id) {
-        return ticketRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public Ticket createTicket(Ticket ticket, int projectionId) {
-        return ticketRepo.save(new Ticket(ticket.getTicketRow(),
-                ticket.getTicketColumn(),
-                ticket.isSold(),
-                projectionRepo.findById(projectionId).orElseThrow(ResourceNotFoundException::new)));
+        return ticketRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no such ticket in our system!"));
     }
 
     @Override

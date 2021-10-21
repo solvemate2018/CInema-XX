@@ -28,40 +28,67 @@ public class TheaterServiceImpl implements TheaterServiceInterface {
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public Theater getTheaterById(int id) {
-        return theaterRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return theaterRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no such theater in our system"));
     }
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public Theater createTheater(Theater theater) {
+        if(theater.getName().isBlank() || theater.getName().isEmpty() || theater.getName() == null){
+            throw new IllegalArgumentException("The name must not be empty");
+        }
+        else if(theater.getStreet().isBlank() || theater.getStreet().isEmpty() || theater.getStreet() == null){
+            throw new IllegalArgumentException("The street must not be empty");
+        }
+        else if(theater.getCity().isBlank() || theater.getCity().isEmpty() || theater.getCity() == null){
+            throw new IllegalArgumentException("The city must not be empty");
+        }
+        else if(theater.getStreetNumber() <= 0){
+            throw new IllegalArgumentException("The street number must not be negative or 0");
+        }
         return theaterRepo.save(theater);
     }
 
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public void deleteTheater(int id) {
-        if (theaterRepo.existsById(id)) {
+        if (!hallRepo.existsByTheater(theaterRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no such theater in our system!")))) {
             theaterRepo.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException();
         }
+        throw new IllegalStateException("There are Cinema halls in this Theater. Try deleting them first!");
     }
 
     @Override
     public Theater updateTheater(int theaterId, Theater theater) {
         Theater updatedTheater = theaterRepo.findById(theaterId)
                 .orElseThrow(() -> new ResourceNotFoundException());
-        if(theater.getName()!=null){updatedTheater.setName(theater.getName());}
-        if(theater.getCity()!=null){updatedTheater.setCity(theater.getCity());}
-        if(theater.getStreet()!=null){updatedTheater.setStreet(theater.getStreet());}
-        if(theater.getStreetNumber()>0){updatedTheater.setStreetNumber(theater.getStreetNumber());}
+        if(theater.getName().isBlank() || theater.getName().isEmpty()){
+            throw new IllegalArgumentException("The name must not be empty");
+        }
+        else if(theater.getStreet().isBlank() || theater.getStreet().isEmpty()){
+            throw new IllegalArgumentException("The street must not be empty");
+        }
+        else if(theater.getCity().isBlank() || theater.getCity().isEmpty()){
+            throw new IllegalArgumentException("The city must not be empty");
+        }
+        else if(theater.getStreetNumber() <= 0){
+            throw new IllegalArgumentException("The street number must not be negative or 0");
+        }
+        if (theater.getName() != null)
+        updatedTheater.setName(theater.getName());
+        if (theater.getCity() != null)
+        updatedTheater.setCity(theater.getCity());
+        if (theater.getStreet() != null)
+        updatedTheater.setStreet(theater.getStreet());
+        if (theater.getStreetNumber() != 0)
+        updatedTheater.setStreetNumber(theater.getStreetNumber());
         return theaterRepo.save(updatedTheater);
     }
 
     @Override
     public Theater addCinemaHall(int projectionId, int hallId) {
-        CinemaHall hall = hallRepo.findById(hallId).orElseThrow(()->new ResourceNotFoundException());
-        Theater theater = theaterRepo.findById(projectionId).orElseThrow(()->new ResourceNotFoundException());
+        CinemaHall hall = hallRepo.findById(hallId).orElseThrow(()->new ResourceNotFoundException("There is no such cinema hall in our system!"));
+        Theater theater = theaterRepo.findById(projectionId).orElseThrow(()->new ResourceNotFoundException("There is no such theater in our system!"));
         theater.getCinemaHalls().add(hall);
         return theaterRepo.save(theater);
     }

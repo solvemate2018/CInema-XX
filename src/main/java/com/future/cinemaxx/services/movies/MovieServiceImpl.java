@@ -10,6 +10,7 @@ import com.future.cinemaxx.repositories.GenreRepo;
 import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
 import com.future.cinemaxx.services.imdb.ImdbMovieServiceInteface;
+import com.sun.xml.bind.v2.runtime.IllegalAnnotationsException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,23 +44,26 @@ public class MovieServiceImpl implements MovieServiceInterface {
 
     @Override
     public Movie getMovieById(int id) {
-        return movieRepo.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return movieRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is not such Movie in our system"));
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Movie createMovie(Movie movie, int genreId, int categoryId) {
+        if(movie.getDuration().isNegative()){
+            throw new IllegalArgumentException("The duration of a movie cannot be a negative number");
+        }
         return movieRepo.save(new Movie(movie.getName(),
                 movie.getDuration(),
-                genreRepo.findById(genreId).orElseThrow(ResourceNotFoundException::new),
-                categoryRepo.findById(categoryId).orElseThrow(ResourceNotFoundException::new)));
+                genreRepo.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("There is not such Genre in our system")),
+                categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("There is not such Category in our system"))));
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteMovie(int movieId) {
         if (projectionRepo.existsByMovie(
-                movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException())))
+                movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("There is not such movie in our system!"))))
             throw new IllegalStateException("There are projections using this movie");
         movieRepo.deleteById(movieId);
     }
@@ -73,8 +77,14 @@ public class MovieServiceImpl implements MovieServiceInterface {
         if (movie.getName() != null) {
             updatedMovie.setName(movie.getName());
         }
-        if (movie.getDuration() != null) {
+        else{
+            throw new IllegalArgumentException("The name should not be null. Try including it in the request!");
+        }
+        if (movie.getDuration() != null || movie.getDuration().isNegative()) {
             updatedMovie.setDuration(movie.getDuration());
+        }
+        else{
+            throw new IllegalArgumentException("The duration cannot be negative.");
         }
 
         if (movie.getGenre() != null) {

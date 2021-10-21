@@ -4,10 +4,14 @@ import com.future.cinemaxx.entities.*;
 import com.future.cinemaxx.repositories.*;
 import com.future.cinemaxx.security.entities.ERole;
 import com.future.cinemaxx.security.entities.Role;
+import com.future.cinemaxx.security.entities.User;
 import com.future.cinemaxx.security.repositories.RoleRepository;
+import com.future.cinemaxx.security.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -25,6 +29,8 @@ public class DataSetup implements CommandLineRunner {
     TheaterRepo theaterRepo;
     TicketRepo ticketRepo;
     RoleRepository roleRepository;
+    UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
 
     public DataSetup(CategoryRepo categoryRepo,
                      CinemaHallRepo cinemaHallRepo,
@@ -33,7 +39,9 @@ public class DataSetup implements CommandLineRunner {
                      ProjectionRepo projectionRepo,
                      TheaterRepo theaterRepo,
                      TicketRepo ticketRepo,
-                     RoleRepository roleRepository) {
+                     RoleRepository roleRepository,
+                     UserRepository userRepository,
+                     PasswordEncoder passwordEncoder) {
         this.categoryRepo = categoryRepo;
         this.cinemaHallRepo = cinemaHallRepo;
         this.genreRepo = genreRepo;
@@ -42,6 +50,8 @@ public class DataSetup implements CommandLineRunner {
         this.theaterRepo = theaterRepo;
         this.ticketRepo = ticketRepo;
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -58,6 +68,17 @@ public class DataSetup implements CommandLineRunner {
         roleRepository.save(adminRole);
         roleRepository.save(customerRole);
         roleRepository.save(managerRole);
+
+        User customer = new User("customer", "customer@example.com", passwordEncoder.encode("test"));
+        User admin = new User("admin", "admin@example.com", passwordEncoder.encode("test"));
+        User manager = new User("manager", "manager@example.com", passwordEncoder.encode("test"));
+        customer.addRole(customerRole);
+        admin.addRole(adminRole);
+        manager.addRole(managerRole);
+
+        userRepository.save(customer);
+        userRepository.save(admin);
+        userRepository.save(manager);
 
         Theater theater = theaterRepo.save(new Theater("Cinema city", "Copenhagen", "Husumtorv", 25));
         Theater theater1 = theaterRepo.save(new Theater("Whatever", "Copenhagen", "Test", 11));
