@@ -17,6 +17,9 @@ Group members:
                 Georgi Emilov Dimitrov ( https://github.com/solvemate2018 )
                 
                 Bartosz Kochanski ( https://github.com/bart758 )
+                  Mostly participated in: integration tests for the endpoints/controllers, making most 
+                  endpoints(The one for projection, theater and category), making some services for category
+                  and genre and projection, fixing errors.
 
 Credentials of different user roles(if you want to test): 
                                                           
