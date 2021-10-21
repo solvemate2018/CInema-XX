@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @TestPropertySource(locations = {"classpath:application-test.properties"})
-@WithMockUser
+@WithMockUser(username = "admin", password = "admin123", roles = {"ADMIN"})
 class CategoryControllerImplTest {
 
     private final String BASE_PATH = "/api/category";

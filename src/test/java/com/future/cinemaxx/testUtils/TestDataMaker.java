@@ -13,7 +13,6 @@ public class TestDataMaker {
     public static void clear(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo, CategoryRepo categoryRepo,
                              GenreRepo genreRepo, MovieRepo movieRepo, ProjectionRepo projectionRepo,
                              TicketRepo ticketRepo) {
-
         ticketRepo.deleteAll();
         projectionRepo.deleteAll();
         movieRepo.deleteAll();
@@ -21,7 +20,6 @@ public class TestDataMaker {
         genreRepo.deleteAll();
         cinemaHallRepo.deleteAll();
         theaterRepo.deleteAll();
-
     }
 
     public static ArrayList<Integer>[] makeDataForTests(TheaterRepo theaterRepo, CinemaHallRepo cinemaHallRepo, CategoryRepo categoryRepo,

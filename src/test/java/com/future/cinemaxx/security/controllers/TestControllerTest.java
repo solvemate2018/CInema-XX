@@ -22,15 +22,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("testSec")  //Will prevent the DateSetup CommandlineRunner from running
 @AutoConfigureTestDatabase
 @EnableAutoConfiguration
-@SpringBootTest(
-        classes = {com.future.cinemaxx.CinemaxxApplication.class},
+@SpringBootTest(classes = {com.future.cinemaxx.CinemaxxApplication.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource(locations = {"classpath:application-test.properties"})
+@WithMockUser(username = "admin", password = "admin123", roles = {"ADMIN"})
 class TestControllerTest {
 
     @Autowired
