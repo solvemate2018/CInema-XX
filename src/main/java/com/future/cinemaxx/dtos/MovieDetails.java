@@ -29,8 +29,8 @@ public class MovieDetails {
     public MovieDetails(JsonNode root) {
         this.title = root.path("title").asText();
         this.fullTitle = root.path("fullTitle").asText();
-        this.releaseDate = root.path("imDbRating").toString();
-        this.imDbRating = root.path("releaseDate").asText();
+        this.releaseDate = root.path("releaseDate").toString();
+        this.imDbRating = root.path("imDbRating").asText();
         this.runtimeStr = root.path("runtimeStr").asText();
         JsonNode actorList = root.get("actorList");
         int i = 0;
