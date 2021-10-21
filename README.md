@@ -21,7 +21,7 @@ Group members:
                  with the preauthorize annotations, created some services, created all entities + repos, ect.
                 
                 Bartosz Kochanski ( https://github.com/bart758 )
-                  Mostly participated in: integration tests for the endpoints/controllers, making most 
+                  Mostly participated in: Creating integration tests for the endpoints/controllers, making most 
                   endpoints(The one for projection, theater and category), making some services for category
                   and genre and projection, fixing errors.
 
