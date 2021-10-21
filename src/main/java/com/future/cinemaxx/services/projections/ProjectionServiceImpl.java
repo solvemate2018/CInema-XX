@@ -142,7 +142,7 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
         if (projection.getTicketPrice() != 0) {
             updatedProjection.setTicketPrice(projection.getTicketPrice());
         }
-        if(projection.getStartTime().isBefore(LocalDateTime.now())){
+        if(projection.getStartTime() != null && projection.getStartTime().isBefore(LocalDateTime.now())){
             throw new IllegalArgumentException("The Date/Time of the projection should be after now!");
         }
         if(projection.getTicketPrice() < 0){

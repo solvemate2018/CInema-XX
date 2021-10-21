@@ -9,6 +9,7 @@ import com.future.cinemaxx.repositories.MovieRepo;
 import com.future.cinemaxx.repositories.ProjectionRepo;
 import com.future.cinemaxx.services.imdb.ImdbMovieServiceInteface;
 import com.future.cinemaxx.services.movies.MovieServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -74,7 +77,7 @@ public class MovieServiceTests {
         MovieDTO movieNew = modelMapper.map(movieService.getMovieById(100), MovieDTO.class);
         String oldName = movieNew.getName();
         movieNew.setName(null);
-        movieService.updateMovie(100, modelMapper.map(movieNew, Movie.class));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> movieService.updateMovie(100, modelMapper.map(movieNew, Movie.class)));
         assertEquals(oldName, movieService.getMovieById(100).getName());
     }
 
