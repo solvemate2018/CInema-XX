@@ -13,6 +13,8 @@ Group members:
                   and delete endpoints with services for projection and movie classes.
                 
                 Petru-Razvan Ilisei ( https://github.com/petr1940 )
+              	Mostly participated in: creating endpoints (genre, creating movie, getting free/booked seats)
+		            making some services for CinemaHall, Theater
                
                 Georgi Emilov Dimitrov ( https://github.com/solvemate2018 )
                  Created the connection to the IMDB API, created the DTO converter, added the security
