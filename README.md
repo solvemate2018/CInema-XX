@@ -1,3 +1,3 @@
 # CInema-XX
 
-Mandatory assignment for university . changed
+Mandatory assignment for university .

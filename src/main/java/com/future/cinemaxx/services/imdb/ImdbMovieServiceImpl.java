@@ -89,7 +89,7 @@ public class ImdbMovieServiceImpl implements ImdbMovieServiceInteface {
     @SneakyThrows
     @Override
     public String getImdbIdFromMovieId(int movieId) {
-        Movie movie = movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException());
+        Movie movie = movieRepo.findById(movieId).orElseThrow(() -> new ResourceNotFoundException("There is not such Movie in our system"));
         String searchForMovieUrl = "https://imdb-api.com/en/API/Search/" + apiKey + "/" + movie.getName();
         ResponseEntity<String> searchResponse = restTemplate.getForEntity(searchForMovieUrl, String.class);
         JsonNode searchRoot = objectMapper.readTree(searchResponse.getBody());

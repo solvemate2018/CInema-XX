@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -104,6 +105,12 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     @Override
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public Projection createProjection(Projection projection, int movieId, int hallId) {
+        if(projection.getStartTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("The Date/Time of the projection should be after now!");
+        }
+        if(projection.getTicketPrice() < 0){
+            throw new IllegalArgumentException("The price of the ticket cannot be lower than 0");
+        }
         Projection newProjection = new Projection(projection.getStartTime(),
                 projection.getTicketPrice(),
                 hallRepo.findById(hallId).orElseThrow(() -> new ResourceNotFoundException("Cinema hall with this id does not exist:" + movieId)),
@@ -117,9 +124,9 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public void deleteProjection(int projectionId) {
         if (!projectionRepo.existsById(projectionId)) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("There is no such projection in our system");
         }
-        ticketRepo.deleteByProjection_Id(projectionId);
+        ticketRepo.deleteAllByProjectionId(projectionId);
         projectionRepo.deleteById(projectionId);
     }
 
@@ -133,6 +140,12 @@ public class ProjectionServiceImpl implements ProjectionServiceInterface {
         }
         if (projection.getTicketPrice() != 0) {
             updatedProjection.setTicketPrice(projection.getTicketPrice());
+        }
+        if(projection.getStartTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("The Date/Time of the projection should be after now!");
+        }
+        if(projection.getTicketPrice() < 0){
+            throw new IllegalArgumentException("The price of the ticket cannot be lower than 0");
         }
         if (hallId != 0) {
             CinemaHall cinemaHall = hallRepo.findById(hallId)
