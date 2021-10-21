@@ -89,7 +89,7 @@ public class ProjectionServiceTests {
     @Sql("/createMovies.sql")
     void createProjection(){
         long countBefore = projectionRepo.count();
-        projectionService.createProjection(new Projection(LocalDateTime.now(),22, new CinemaHall(),new Movie()),100,1);
+        projectionService.createProjection(new Projection(LocalDateTime.now().plusDays(2),22, new CinemaHall(),new Movie()),100,1);
         long countAfter = projectionRepo.count();
         assertEquals(countBefore+1, countAfter);
     }
