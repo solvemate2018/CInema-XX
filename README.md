@@ -15,6 +15,8 @@ Group members:
                 Petru-Razvan Ilisei ( https://github.com/petr1940 )
                
                 Georgi Emilov Dimitrov ( https://github.com/solvemate2018 )
+                 Created the connection to the IMDB API, created the DTO converter, added the security
+                 with the preauthorize annotations, created some services, created all entities + repos, ect.
                 
                 Bartosz Kochanski ( https://github.com/bart758 )
                   Mostly participated in: integration tests for the endpoints/controllers, making most 
