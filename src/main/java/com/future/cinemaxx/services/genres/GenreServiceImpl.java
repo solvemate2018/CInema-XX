@@ -50,9 +50,10 @@ public class GenreServiceImpl implements GenreServiceInterface {
 
     @Override
     public void deleteGenre(int genreId) {
-        if (!movieRepo.existsByGenre(genreRepo.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("There is not such genre in our system.")))) {
+        if (!movieRepo.existsByGenre(genreRepo.findById(genreId).orElseThrow(() -> new ResourceNotFoundException("There is not such genre in our system."))))
+            genreRepo.deleteById(genreId);
+        else {
             throw new IllegalStateException("There are movies using this genre. You need to delete them first!");
         }
-        genreRepo.deleteById(genreId);
     }
 }

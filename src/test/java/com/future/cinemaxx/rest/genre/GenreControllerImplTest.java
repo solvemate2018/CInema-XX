@@ -76,7 +76,7 @@ class GenreControllerImplTest {
     }
 
     @BeforeEach
-    void setUpCategories(){
+    void setUpGenres(){
         ids = TestDataMaker.setUpGenres(genreRepo);
         Role adminRole = new Role(ERole.ROLE_ADMIN);
         roleRepository.save(adminRole);
@@ -124,16 +124,16 @@ class GenreControllerImplTest {
         assertEquals("Bad Rom-com", response.getBody().getName());
     }
 
-//    @Test
-//    void delete() {
-//        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
-//        ResponseEntity<GenreDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids.get(0)),
-//                HttpMethod.DELETE,
-//                entity,
-//                GenreDTO.class);
-//        ResponseEntity<List<GenreDTO>> res = getResponseFromAllGenres();
-//        assertEquals(3,res.getBody().size());
-//    }
+    @Test
+    void delete() {
+        HttpEntity<String> entity = new HttpEntity<>(null,headersForRequest);
+        ResponseEntity<GenreDTO> response = restTemplate.exchange(makeUrl(BASE_PATH+ "/"+ids.get(0)),
+                HttpMethod.DELETE,
+                entity,
+                GenreDTO.class);
+        ResponseEntity<List<GenreDTO>> res = getResponseFromAllGenres();
+        assertEquals(3,res.getBody().size());
+    }
 
     @Test
     void update() {
