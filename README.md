@@ -1,4 +1,4 @@
-# CInema-XX
+# CInema-XX.
 
 Group "Future"
 
