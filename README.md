@@ -1,6 +1,6 @@
 # CInema-XX.
 
-Group "Future" .
+Group "Future".
 
 Hosted server documentation link:  http://3.81.230.232/swagger 
 
