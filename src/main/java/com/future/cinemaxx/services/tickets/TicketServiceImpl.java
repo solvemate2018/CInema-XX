@@ -67,6 +67,7 @@ public class TicketServiceImpl implements TicketServiceInterface {
             throw new IllegalStateException("The selected ticket is already booked");
         }
         ticketToBook.setSold(true);
+        /*
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
         if (principal instanceof UserDetails) {
@@ -75,6 +76,8 @@ public class TicketServiceImpl implements TicketServiceInterface {
             username = principal.toString();
         }
         ticketToBook.setUser(userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Invalid user")));
+
+         */
         return ticketRepo.save(ticketToBook);
     }
 
