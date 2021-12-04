@@ -56,7 +56,7 @@ public class TicketServiceImpl implements TicketServiceInterface {
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    //@PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public Ticket bookTicket(int projectionId, int row, int column) {
         Ticket ticketToBook = ticketRepo.getTicketByProjection_IdAndTicketRowAndTicketColumn(projectionId, row, column);
         if (ticketToBook == null) {
