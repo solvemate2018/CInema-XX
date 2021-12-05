@@ -20,7 +20,6 @@ public class TheaterServiceImpl implements TheaterServiceInterface {
     CinemaHallRepo hallRepo;
 
     @Override
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public List<Theater> getAllTheaters() {
         return theaterRepo.findAll();
     }

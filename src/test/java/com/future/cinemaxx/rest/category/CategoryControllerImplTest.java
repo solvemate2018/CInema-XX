@@ -74,6 +74,7 @@ class CategoryControllerImplTest {
     public CategoryControllerImplTest(CategoryRepo categoryRepo) {
         this.categoryRepo = categoryRepo;
     }
+
     @BeforeEach
     void setUpCategories(){
         ids = TestDataMaker.setUpCategories(categoryRepo);
