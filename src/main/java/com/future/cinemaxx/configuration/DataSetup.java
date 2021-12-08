@@ -103,16 +103,22 @@ public class DataSetup implements CommandLineRunner {
         Movie movie1 = movieRepo.save(new Movie("Scary movie", Duration.ofMinutes(125), genre2, category4));
         Movie movie2 = movieRepo.save(new Movie("Spider-man", Duration.ofMinutes(140), genre4, category1));
         Movie movie3 = movieRepo.save(new Movie("Gladiator", Duration.ofMinutes(115), genre1, category3));
-        Movie movie4 = movieRepo.save(new Movie("Last movie", Duration.ofMinutes(163), genre3, category2));
+        Movie movie4 = movieRepo.save(new Movie("The Shawshank Redemption", Duration.ofMinutes(181), genre3, category3));
         Movie movie5 = movieRepo.save(new Movie("Inception", Duration.ofMinutes(200), genre3, category3));
         Movie movie6 = movieRepo.save(new Movie("Dark Knight", Duration.ofMinutes(220), genre3, category3));
         Movie movie7 = movieRepo.save(new Movie("Deadpool", Duration.ofMinutes(163), genre2, category4));
+        Movie movie8 = movieRepo.save(new Movie("Dune", Duration.ofMinutes(130), genre3, category4));
+        Movie movie9 = movieRepo.save(new Movie("The Dark Knight", Duration.ofMinutes(200), genre3, category3));
+        Movie movie10 = movieRepo.save(new Movie("Monty Python and the Holy Grail", Duration.ofMinutes(91), genre2, category2));
+        Movie movie11 = movieRepo.save(new Movie("The Thing ", Duration.ofMinutes(120), genre4, category4));
 
-        Projection projection1 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall1, movie1));
-        Projection projection2 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(7), 15.6f, cinemaHall1, movie2));
-        Projection projection3 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall3, movie4));
-        Projection projection4 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall2, movie3));
-        Projection projection5 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(1).plusHours(2), 15.6f, cinemaHall4, movie2));
+        Projection projection1 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall1, movie1));
+        Projection projection32 = projectionRepo.save(new Projection(LocalDateTime.now().plusHours(2), 15.6f, cinemaHall1, movie1));
+        Projection projection33 = projectionRepo.save(new Projection(LocalDateTime.now().plusHours(2), 15.6f, cinemaHall2, movie1));
+        Projection projection2 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall1, movie2));
+        Projection projection3 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall3, movie4));
+        Projection projection4 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall2, movie3));
+        Projection projection5 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall4, movie2));
         Projection projection6 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(100).plusHours(2), 15.6f, cinemaHall4, movie2));
         Projection projection7 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(22).plusHours(12), 15.6f, cinemaHall4, movie2));
         Projection projection8 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(22), 15.6f, cinemaHall1, movie4));
@@ -122,12 +128,23 @@ public class DataSetup implements CommandLineRunner {
         Projection projection12 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(9), 15.6f, cinemaHall5, movie5));
         Projection projection13 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(12), 15.6f, cinemaHall5, movie5));
         Projection projection14 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(13), 15.6f, cinemaHall5, movie5));
-        Projection projection15 = projectionRepo.save(new Projection(LocalDateTime.parse("2025-11-12T12:30:00"), 15.6f, cinemaHall5, movie6));
-        Projection projection16 = projectionRepo.save(new Projection(LocalDateTime.parse("2025-11-14T11:35:00"), 15.6f, cinemaHall5, movie6));
-        Projection projection17 = projectionRepo.save(new Projection(LocalDateTime.parse("2025-11-14T09:35:00"), 15.6f, cinemaHall4, movie7));
+        Projection projection15 = projectionRepo.save(new Projection(LocalDateTime.parse("2021-12-12T12:30:00"), 15.6f, cinemaHall5, movie6));
+        Projection projection16 = projectionRepo.save(new Projection(LocalDateTime.parse("2021-12-14T11:35:00"), 15.6f, cinemaHall5, movie6));
+        Projection projection17 = projectionRepo.save(new Projection(LocalDateTime.parse("2021-12-14T09:35:00"), 15.6f, cinemaHall4, movie7));
         Projection projection18 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall5, movie7));
         Projection projection19 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(10), 15.6f, cinemaHall6, movie7));
         Projection projection20 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(3), 15.6f, cinemaHall1, movie7));
+        Projection projection21 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall1, movie7));
+        Projection projection22 = projectionRepo.save(new Projection(LocalDateTime.now().plusHours(3), 16.6f, cinemaHall2, movie8));
+        Projection projection23 = projectionRepo.save(new Projection(LocalDateTime.now().plusHours(2), 15.6f, cinemaHall1, movie9));
+        Projection projection24 = projectionRepo.save(new Projection(LocalDateTime.now().plusHours(4), 15.6f, cinemaHall1, movie10));
+        Projection projection25 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall1, movie11));
+        Projection projection26 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall1, movie9));
+        Projection projection27 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall1, movie9));
+        Projection projection28 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(1), 15.6f, cinemaHall2, movie8));
+        Projection projection29 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(1), 15.6f, cinemaHall1, movie11));
+        Projection projection30 = projectionRepo.save(new Projection(LocalDateTime.now().plusDays(1), 15.6f, cinemaHall3, movie11));
+        Projection projection31 = projectionRepo.save(new Projection(LocalDateTime.now(), 15.6f, cinemaHall2, movie10));
 
         ticketRepo.saveAll(projection1.getTickets());
         ticketRepo.saveAll(projection2.getTickets());
@@ -149,5 +166,18 @@ public class DataSetup implements CommandLineRunner {
         ticketRepo.saveAll(projection18.getTickets());
         ticketRepo.saveAll(projection19.getTickets());
         ticketRepo.saveAll(projection20.getTickets());
+        ticketRepo.saveAll(projection21.getTickets());
+        ticketRepo.saveAll(projection22.getTickets());
+        ticketRepo.saveAll(projection23.getTickets());
+        ticketRepo.saveAll(projection24.getTickets());
+        ticketRepo.saveAll(projection25.getTickets());
+        ticketRepo.saveAll(projection26.getTickets());
+        ticketRepo.saveAll(projection27.getTickets());
+        ticketRepo.saveAll(projection28.getTickets());
+        ticketRepo.saveAll(projection29.getTickets());
+        ticketRepo.saveAll(projection30.getTickets());
+        ticketRepo.saveAll(projection31.getTickets());
+        ticketRepo.saveAll(projection32.getTickets());
+        ticketRepo.saveAll(projection33.getTickets());
     }
 }

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProjectionDTO {
+    private int id;
     private LocalDateTime startTime;
     private float ticketPrice;
     private String cinemaHallName;
