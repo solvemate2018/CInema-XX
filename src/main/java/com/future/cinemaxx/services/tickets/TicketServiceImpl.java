@@ -56,7 +56,7 @@ public class TicketServiceImpl implements TicketServiceInterface {
     }
 
     @Override
-    //@PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public Ticket bookTicket(int projectionId, int row, int column) {
         Ticket ticketToBook = ticketRepo.getTicketByProjection_IdAndTicketRowAndTicketColumn(projectionId, row, column);
         if (ticketToBook == null) {
@@ -67,7 +67,7 @@ public class TicketServiceImpl implements TicketServiceInterface {
             throw new IllegalStateException("The selected ticket is already booked");
         }
         ticketToBook.setSold(true);
-        /*
+
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
         if (principal instanceof UserDetails) {
@@ -77,7 +77,7 @@ public class TicketServiceImpl implements TicketServiceInterface {
         }
         ticketToBook.setUser(userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Invalid user")));
 
-         */
+
         return ticketRepo.save(ticketToBook);
     }
 
