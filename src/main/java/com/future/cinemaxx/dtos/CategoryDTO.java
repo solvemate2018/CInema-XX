@@ -11,6 +11,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class CategoryDTO {
+    private int id;
     private String name;
     private int ageLimit;
 }
