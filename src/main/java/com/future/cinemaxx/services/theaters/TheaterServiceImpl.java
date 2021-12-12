@@ -25,7 +25,6 @@ public class TheaterServiceImpl implements TheaterServiceInterface {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public Theater getTheaterById(int id) {
         return theaterRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no such theater in our system"));
     }
