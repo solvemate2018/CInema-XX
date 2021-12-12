@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CinemaHallDTO {
+    private String id;
     private String name;
     private int numberOfRows;
     private int numberOfColumns;
