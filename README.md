@@ -8,7 +8,8 @@ Hosted server documentation link:  http://3.81.230.232/swagger
 Hosted server link: http://3.81.230.232
 
 Group members:
-                
+
+
                 Mareks Lipnickis ( https://github.com/marcol9 )
                   Mostly participated in: Setting up the pipeline, integration tests of services, update
                   and delete endpoints with services for projection and movie classes.
